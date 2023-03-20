@@ -1,0 +1,32 @@
+{
+    "name": "nicdev/webflow-sdk",
+    "description": "Use all the features offered by the Webflow API",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7.5",
+        "vipnytt/sitemapparser": "^1.1"
+    },
+    "require-dev": {
+        "pestphp/pest": "^1.22"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Nicdev\\WebflowSdk\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Nic Rosental",
+            "email": "nic@punchlist.com"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
