@@ -7,7 +7,7 @@
         "vipnytt/sitemapparser": "^1.1"
     },
     "require-dev": {
-        "pestphp/pest": "^1.22"
+        "pestphp/pest": "^2.4"
     },
     "license": "MIT",
     "autoload": {
