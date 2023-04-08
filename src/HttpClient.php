@@ -16,8 +16,8 @@ class HttpClient
         private $headers = []
     ) {
         $this->headers = ['headers' => [
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept'        => 'application/json',
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ]];
     }
 

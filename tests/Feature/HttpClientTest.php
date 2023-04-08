@@ -35,7 +35,7 @@ it('can make HTTP GET requests to Webflow API', function () {
     expect($this->container[0]['request']->getMethod())->toBe('GET');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
-        'Accept'        => ['application/json'],
+        'Accept' => ['application/json'],
     ]);
 });
 
@@ -46,6 +46,6 @@ it('can make HTTP POST requests to Webflow API', function () {
     expect($this->container[0]['request']->getMethod())->toBe('POST');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
-        'Accept'        => ['application/json'],
+        'Accept' => ['application/json'],
     ]);
 });

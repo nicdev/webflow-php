@@ -2,8 +2,6 @@
 
 namespace Nicdev\WebflowSdk\Endpoints;
 
-use Nicdev\WebflowSdk\HttpClient;
-
 class Sites
 {
     public function __construct(protected $client)
@@ -18,16 +16,16 @@ class Sites
 
     public function site(string $siteId): array
     {
-        return $this->client->get('/sites/' . $siteId);
+        return $this->client->get('/sites/'.$siteId);
     }
 
     public function publish(string $siteId): array
     {
-        return $this->client->post('/sites/' . $siteId . '/publish');
+        return $this->client->post('/sites/'.$siteId.'/publish');
     }
 
     public function domains(string $siteId): array
     {
-        return $this->client->get('/sites/' . $siteId . '/domains');
+        return $this->client->get('/sites/'.$siteId.'/domains');
     }
 }

@@ -31,7 +31,7 @@ it('lists sites', function () {
     expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
-        'Accept'        => ['application/json'],
+        'Accept' => ['application/json'],
     ]);
 });
 
@@ -43,7 +43,7 @@ it('gets a site', function () {
     expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
-        'Accept'        => ['application/json'],
+        'Accept' => ['application/json'],
     ]);
 });
 
@@ -55,11 +55,11 @@ it('publishes a site', function () {
     expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/publish');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
-        'Accept'        => ['application/json'],
+        'Accept' => ['application/json'],
     ]);
 });
 
-it('gets site\'s domains', function() {
+it('gets site\'s domains', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $data = $this->webflowApiClient->fetchSiteDomains('foo');
     expect($data)->toBeArray();
@@ -67,8 +67,6 @@ it('gets site\'s domains', function() {
     expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/domains');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
-        'Accept'        => ['application/json'],
+        'Accept' => ['application/json'],
     ]);
 });
-
-
