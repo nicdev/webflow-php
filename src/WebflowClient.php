@@ -20,10 +20,10 @@ class WebflowClient {
         $response = $this->client->get($path);
         return json_decode($response->getBody(), true);
     }
-}
 
-// // Example usage
-// $apiKey = 'your_api_key_here';
-// $client = new WebflowApiClient($apiKey);
-// $data = $client->get('/sites');
-// var_dump($data);
+    public function post($path) : array
+    {
+        $response = $this->client->post($path);
+        return json_decode($response->getBody(), true);
+    }
+}

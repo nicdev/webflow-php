@@ -10,38 +10,35 @@ use Nicdev\WebflowSdk\WebflowClient;
 // use Mockery;
 
 // use Illuminate\Support\HttpClient;
-
-
-it('intializes a client with the proper settings', function () {
-    $client = new WebflowClient();
-    
-    expect($client::BASE_URL)->toBe('https://api.webflow.com');
-});
-
-
-it('can make HTTP GET requests to Webflow API', function () {
-    // Create a mock handler to simulate HTTP responses
-    $container = [];
-    $history = Middleware::history($container);
-    $mockHandler = new MockHandler([
-        new Response(200, ['Content-Type' => 'application/json'], json_encode(['sites' => []]))
-    ]);
-    $handlerStack = HandlerStack::create($mockHandler);
+beforeEach(function () {
+    $this->container = [];
+    $history = Middleware::history($this->container);
+    $this->mockHandler = new MockHandler();
+    $handlerStack = HandlerStack::create($this->mockHandler);
     $handlerStack->push($history);
 
     // Create a Guzzle client with the mock handler
     $client = new Client(['handler' => $handlerStack]);
 
     // Create an instance of the WebflowApiClient using the mocked Guzzle client
-    $webflowApiClient = new WebflowClient($client);
+    $this->webflowApiClient = new WebflowClient($client);
+});
 
-    // Make a GET request to the Webflow API
-    $data = $webflowApiClient->get('/sites');
+it('intializes a client with the proper settings', function () {
+    expect($this->webflowApiClient::BASE_URL)->toBe('https://api.webflow.com');
+});
 
-    //ray($container);
-    expect($container[0]['request']->getMethod())->toBe('GET');
-    
-    // Assert that the response is an array
+it('can make HTTP GET requests to Webflow API', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->get('/');
     expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('GET');
+});
+
+it('can make HTTP POST requests to Webflow API', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->post('/');
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('POST');
 });
 
