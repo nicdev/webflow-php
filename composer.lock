@@ -446,25 +446,25 @@
         },
         {
             "name": "psr/http-message",
-            "version": "1.0.1",
+            "version": "1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-message.git",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
+                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": "^7.2 || ^8.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -493,9 +493,9 @@
                 "response"
             ],
             "support": {
-                "source": "https://github.com/php-fig/http-message/tree/master"
+                "source": "https://github.com/php-fig/http-message/tree/1.1"
             },
-            "time": "2016-08-06T14:39:51+00:00"
+            "time": "2023-04-04T09:50:52+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -610,16 +610,16 @@
         },
         {
             "name": "vipnytt/sitemapparser",
-            "version": "v1.1.6",
+            "version": "v1.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VIPnytt/SitemapParser.git",
-                "reference": "688b46962dca544bbb8c0f486dbab271a8b63f7a"
+                "reference": "c263e1f0fdcc8be541e805d52acab801a43be358"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VIPnytt/SitemapParser/zipball/688b46962dca544bbb8c0f486dbab271a8b63f7a",
-                "reference": "688b46962dca544bbb8c0f486dbab271a8b63f7a",
+                "url": "https://api.github.com/repos/VIPnytt/SitemapParser/zipball/c263e1f0fdcc8be541e805d52acab801a43be358",
+                "reference": "c263e1f0fdcc8be541e805d52acab801a43be358",
                 "shasum": ""
             },
             "require": {
@@ -666,9 +666,9 @@
             ],
             "support": {
                 "issues": "https://github.com/VIPnytt/SitemapParser/issues",
-                "source": "https://github.com/VIPnytt/SitemapParser/tree/v1.1.6"
+                "source": "https://github.com/VIPnytt/SitemapParser/tree/v1.1.7"
             },
-            "time": "2022-11-07T21:30:28+00:00"
+            "time": "2023-03-27T16:06:46+00:00"
         }
     ],
     "packages-dev": [
