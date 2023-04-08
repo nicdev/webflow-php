@@ -30,7 +30,6 @@ it('can make HTTP GET requests to Webflow API', function () {
     $handlerStack->push($history);
 
     // Create a Guzzle client with the mock handler
-    // $client = new Client(['handler' => $mockHandler]);
     $client = new Client(['handler' => $handlerStack]);
 
     // Create an instance of the WebflowApiClient using the mocked Guzzle client
