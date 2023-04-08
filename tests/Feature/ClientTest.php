@@ -21,7 +21,7 @@ beforeEach(function () {
     $client = new Client(['handler' => $handlerStack]);
 
     // Create an instance of the WebflowApiClient using the mocked Guzzle client
-    $this->webflowApiClient = new WebflowClient($client);
+    $this->webflowApiClient = new WebflowClient(apiKey: 'foo', client: $client);
 });
 
 it('intializes a client with the proper settings', function () {
