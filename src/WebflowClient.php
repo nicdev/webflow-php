@@ -9,24 +9,28 @@ class WebflowClient
     const BASE_URL = 'https://api.webflow.com';
 
     public function __construct(
-        private $apiKey,
+        private $token,
         private $client = new Client([
             'base_uri' => self::BASE_URL,
-        ])
+        ]),
+        private $headers = []
     ) {
-        $this->apiKey = $apiKey;
+        $this->headers = ['headers' => [
+            'Authorization' => 'Bearer ' . $this->token,
+            'Accept'        => 'application/json',
+        ]];
     }
 
     public function get($path): array
     {
-        $response = $this->client->get($path);
+        $response = $this->client->get($path, $this->headers);
 
         return json_decode($response->getBody(), true);
     }
 
     public function post($path): array
     {
-        $response = $this->client->post($path);
+        $response = $this->client->post($path, $this->headers);
 
         return json_decode($response->getBody(), true);
     }

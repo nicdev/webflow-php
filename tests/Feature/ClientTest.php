@@ -21,7 +21,7 @@ beforeEach(function () {
     $client = new Client(['handler' => $handlerStack]);
 
     // Create an instance of the WebflowApiClient using the mocked Guzzle client
-    $this->webflowApiClient = new WebflowClient(apiKey: 'foo', client: $client);
+    $this->webflowApiClient = new WebflowClient(token: 'foo', client: $client);
 });
 
 it('intializes a client with the proper settings', function () {
@@ -33,6 +33,10 @@ it('can make HTTP GET requests to Webflow API', function () {
     $data = $this->webflowApiClient->get('/');
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('GET');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept'        => ['application/json'],
+    ]);
 });
 
 it('can make HTTP POST requests to Webflow API', function () {
@@ -40,4 +44,8 @@ it('can make HTTP POST requests to Webflow API', function () {
     $data = $this->webflowApiClient->post('/');
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('POST');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept'        => ['application/json'],
+    ]);
 });
