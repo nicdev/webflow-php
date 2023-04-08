@@ -5,7 +5,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
-use Nicdev\WebflowSdk\WebflowClient;
+use Nicdev\WebflowSdk\HttpClient;
 
 // use Mockery;
 
@@ -21,7 +21,7 @@ beforeEach(function () {
     $client = new Client(['handler' => $handlerStack]);
 
     // Create an instance of the WebflowApiClient using the mocked Guzzle client
-    $this->webflowApiClient = new WebflowClient(token: 'foo', client: $client);
+    $this->webflowApiClient = new HttpClient(token: 'foo', client: $client);
 });
 
 it('intializes a client with the proper settings', function () {

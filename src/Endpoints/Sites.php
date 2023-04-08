@@ -1,10 +1,10 @@
 <?php
 
-use Nicdev\WebflowSdk\WebflowClient;
+use Nicdev\WebflowSdk\HttpClient;
 
 class Sites
 {
-    public function __construct(protected WebflowClient $client)
+    public function __construct(protected HttpClient $client)
     {
         $this->client = $client;
     }

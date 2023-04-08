@@ -4,7 +4,7 @@ namespace Nicdev\WebflowSdk;
 
 use GuzzleHttp\Client;
 
-class WebflowClient
+class HttpClient
 {
     const BASE_URL = 'https://api.webflow.com';
 
