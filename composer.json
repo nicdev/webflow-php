@@ -4,7 +4,8 @@
     "type": "library",
     "require": {
         "guzzlehttp/guzzle": "^7.5",
-        "vipnytt/sitemapparser": "^1.1"
+        "vipnytt/sitemapparser": "^1.1",
+        "laravel/pint": "^1.8"
     },
     "require-dev": {
         "pestphp/pest": "^2.4"

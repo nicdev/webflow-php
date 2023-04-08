@@ -41,4 +41,3 @@ it('can make HTTP POST requests to Webflow API', function () {
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('POST');
 });
-
