@@ -20,17 +20,17 @@ beforeEach(function () {
     // Create a Guzzle client with the mock handler
     $client = new Client(['handler' => $handlerStack]);
 
-    // Create an instance of the WebflowApiClient using the mocked Guzzle client
-    $this->webflowApiClient = new HttpClient(token: 'foo', client: $client);
+    // Create an instance of the httpClient using the mocked Guzzle client
+    $this->httpClient = new HttpClient(token: 'foo', client: $client);
 });
 
 it('intializes a client with the proper settings', function () {
-    expect($this->webflowApiClient::BASE_URL)->toBe('https://api.webflow.com');
+    expect($this->httpClient::BASE_URL)->toBe('https://api.webflow.com');
 });
 
 it('can make HTTP GET requests to Webflow API', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->get('/');
+    $data = $this->httpClient->get('/');
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('GET');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
@@ -41,7 +41,7 @@ it('can make HTTP GET requests to Webflow API', function () {
 
 it('can make HTTP POST requests to Webflow API', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->post('/');
+    $data = $this->httpClient->post('/');
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('POST');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([

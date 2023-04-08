@@ -1,10 +1,12 @@
 <?php
 
+namespace Nicdev\WebflowSdk\Endpoints;
+
 use Nicdev\WebflowSdk\HttpClient;
 
 class Sites
 {
-    public function __construct(protected HttpClient $client)
+    public function __construct(protected $client)
     {
         $this->client = $client;
     }
@@ -14,7 +16,18 @@ class Sites
         return $this->client->get('/sites');
     }
 
-    // public function post(): array
-    // {
-    // }
+    public function site(string $siteId): array
+    {
+        return $this->client->get('/sites/' . $siteId);
+    }
+
+    public function publish(string $siteId): array
+    {
+        return $this->client->post('/sites/' . $siteId . '/publish');
+    }
+
+    public function domains(string $siteId): array
+    {
+        return $this->client->get('/sites/' . $siteId . '/domains');
+    }
 }
