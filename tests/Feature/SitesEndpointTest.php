@@ -5,7 +5,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
-use Nicdev\WebflowSdk\HttpClient;
 use Nicdev\WebflowSdk\Webflow;
 
 beforeEach(function () {
@@ -17,10 +16,9 @@ beforeEach(function () {
 
     // Create a Guzzle client with the mock handler
     $client = new Client(['handler' => $handlerStack]);
-    $httpClient = new HttpClient('foo', $client);
 
     // Create an instance of the WebflowApiClient using the mocked Guzzle client
-    $this->webflowApiClient = new Webflow(token: 'foo', client: $httpClient);
+    $this->webflowApiClient = new Webflow(token: 'foo', client: $client);
 });
 
 it('lists sites', function () {

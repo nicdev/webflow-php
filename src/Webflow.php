@@ -2,40 +2,41 @@
 
 namespace Nicdev\WebflowSdk;
 
-use Nicdev\WebflowSdk\Endpoints\Sites;
-
-class Webflow
+class Webflow extends HttpClient
 {
     public function __construct(private $token, private $client = null)
     {
-        $this->client = $client ?: new HttpClient($token);
+        parent::__construct($token, $client);
     }
 
     public function listSites()
     {
-        $sites = new Sites($this->client);
-
-        return $sites->list();
+        return $this->get('/sites');
     }
 
     public function fetchSite(string $siteId)
     {
-        $sites = new Sites($this->client);
-
-        return $sites->site($siteId);
+        return $this->get('/sites/'.$siteId);
     }
 
     public function publishSite(string $siteId)
     {
-        $sites = new Sites($this->client);
-
-        return $sites->publish($siteId);
+       return $this->post('/sites/'.$siteId.'/publish');
     }
 
     public function fetchSiteDomains(string $siteId)
     {
-        $sites = new Sites($this->client);
+        return $this->get('/sites/'.$siteId.'/domains');
+    }
 
-        return $sites->domains($siteId);
+    public function listWebhooks(string $siteId)
+    {
+        return $this->get('/sites/'.$siteId.'/webhooks');
+    }
+
+    // @TODO validate trigger types, set up filter stuff
+    public function createWebhook(string $siteId, string $triggerType, string $url, array $filter = [])
+    {
+        $this->client->post('/webhooks/'.$siteId);
     }
 }

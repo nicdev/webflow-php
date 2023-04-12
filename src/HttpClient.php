@@ -2,6 +2,7 @@
 
 namespace Nicdev\WebflowSdk;
 
+use Exception;
 use GuzzleHttp\Client;
 
 class HttpClient
@@ -10,11 +11,13 @@ class HttpClient
 
     public function __construct(
         private $token,
-        private $client = new Client([
-            'base_uri' => self::BASE_URL,
-        ]),
-        private $headers = []
+        private $client = null,
+        private $headers = [],
+        private $result = [],
     ) {
+        $this->client = $client ?: new Client([
+            'base_uri' => self::BASE_URL,
+        ]);
         $this->headers = ['headers' => [
             'Authorization' => 'Bearer '.$this->token,
             'Accept' => 'application/json',
@@ -25,13 +28,28 @@ class HttpClient
     {
         $response = $this->client->get($path, $this->headers);
 
-        return json_decode($response->getBody(), true);
+        return $this->respond($response);
     }
 
     public function post($path): array
     {
         $response = $this->client->post($path, $this->headers);
 
-        return json_decode($response->getBody(), true);
+        return $this->respond($response);
+    }
+
+    public function respond($response): array
+    {
+        if ($response->getStatusCode() === 200) {
+            $this->result = json_decode($response->getBody(), true);
+
+            return $this->result;
+        }
+        throw new Exception('Webflow API Error: '.$response->getStatusCode().' '.$response->getReasonPhrase());
+    }
+
+    public function lastResult(): array
+    {
+        return $this->result;
     }
 }
