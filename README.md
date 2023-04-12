@@ -14,9 +14,7 @@ To use the SDK, simply create a new Webflow instance with your Webflow API token
 ```php
 $webflow = new Nicdev\WebflowSdk\Webflow('your_api_token');
 You can then call any of the available methods, passing in any required parameters:
-```
 
-```php
 // List all sites
 $sites = $webflow->listSites();
 
