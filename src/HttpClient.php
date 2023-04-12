@@ -63,10 +63,10 @@ class HttpClient
     {
         if ($response->getStatusCode() === 200) {
             $this->result = json_decode($response->getBody(), true);
-            
+
             return $this->result;
         }
-        
+
         throw new Exception('Webflow API Error: '.$response->getStatusCode().' '.$response->getReasonPhrase());
     }
 

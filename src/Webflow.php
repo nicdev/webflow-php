@@ -58,6 +58,7 @@ class Webflow extends HttpClient
     public function listItems(string $collectionId, int $page = 0)
     {
         $offset = $page * 100;
+
         return $this->get('/collections/'.$collectionId.'/items', ['limit' => 100, 'offset' => $offset]);
     }
 }

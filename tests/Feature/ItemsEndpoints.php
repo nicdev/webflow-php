@@ -21,7 +21,7 @@ beforeEach(function () {
     $this->webflowApiClient = new Webflow(token: 'foo', client: $client);
 });
 
-it('lists the items for a collection', function() {
+it('lists the items for a collection', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $data = $this->webflowApiClient->listItems('foo');
     expect($data)->toBeArray();

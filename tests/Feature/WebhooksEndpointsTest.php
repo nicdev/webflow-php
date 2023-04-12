@@ -21,7 +21,7 @@ beforeEach(function () {
     $this->webflowApiClient = new Webflow(token: 'foo', client: $client);
 });
 
-it('lists the webhooks for a site', function() {
+it('lists the webhooks for a site', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $data = $this->webflowApiClient->listWebhooks('foo');
     expect($data)->toBeArray();
@@ -33,7 +33,7 @@ it('lists the webhooks for a site', function() {
     ]);
 });
 
-it('creates a webhook', function() {
+it('creates a webhook', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $data = $this->webflowApiClient->createWebhook('foo');
     expect($data)->toBeArray();
@@ -45,7 +45,7 @@ it('creates a webhook', function() {
     ]);
 })->skip('//TODO need to finish implementing webhook creation options');
 
-it('deletes a webhook', function() {
+it('deletes a webhook', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $data = $this->webflowApiClient->deleteWebhook('foo', 'bar');
     expect($data)->toBeNull();
