@@ -4,6 +4,8 @@ namespace Nicdev\WebflowSdk;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 
 class HttpClient
 {
@@ -14,10 +16,21 @@ class HttpClient
         private $client = null,
         private $headers = [],
         private $result = [],
+        private $history = [],
     ) {
-        $this->client = $client ?: new Client([
-            'base_uri' => self::BASE_URL,
-        ]);
+        if($client) {
+            $this->client = $client;
+        } else {
+            // $historyMiddleware = Middleware::history($this->history);
+            // $stack = HandlerStack::create();
+            // $stack->push($historyMiddleware);
+
+            $this->client = new Client([
+                'base_uri' => self::BASE_URL,
+                ...self::makeHandler()
+            ]);   
+        }
+         
         $this->headers = ['headers' => [
             'Authorization' => 'Bearer '.$this->token,
             'Accept' => 'application/json',
@@ -66,12 +79,35 @@ class HttpClient
 
             return $this->result;
         }
+    }
 
-        throw new Exception('Webflow API Error: '.$response->getStatusCode().' '.$response->getReasonPhrase());
+    private function makeHandler():array
+    {
+        $historyMiddleware = Middleware::history($this->history);
+        $stack = HandlerStack::create();
+        $stack->push($historyMiddleware);
+
+        return ['handler' => $stack];
     }
 
     public function lastResult(): array
     {
         return $this->result;
+    }
+
+    public function lastRequest()
+    {
+        $request = end($this->history)['request'] ?? null;
+        if($request) {
+            return $request->getUri() . '';
+        }
+        // if ($lastRequest) {
+        //     $request = $lastRequest['request'];
+        //     $response = $lastRequest['response'];
+
+        //     echo "Request method: " . $request->getMethod() . PHP_EOL;
+        //     echo "Request URI: " . $request->getUri() . PHP_EOL;
+        //     echo "Response status: " . $response->getStatusCode() . PHP_EOL;
+        // }
     }
 }
