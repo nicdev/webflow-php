@@ -61,4 +61,11 @@ class Webflow extends HttpClient
 
         return $this->get('/collections/'.$collectionId.'/items', ['limit' => 100, 'offset' => $offset]);
     }
+
+    public function listItemsCursor(string $collectionId): Webflow
+    {
+        // @TODO this will return an isntance of the class itself, and allow for chaining
+        // with $this->next() and $this->prev() methods
+        return $this;
+    }
 }
