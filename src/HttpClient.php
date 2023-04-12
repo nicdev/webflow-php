@@ -2,7 +2,6 @@
 
 namespace Nicdev\WebflowSdk;
 
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
@@ -18,7 +17,7 @@ class HttpClient
         private $result = [],
         private $history = [],
     ) {
-        if($client) {
+        if ($client) {
             $this->client = $client;
         } else {
             // $historyMiddleware = Middleware::history($this->history);
@@ -27,10 +26,10 @@ class HttpClient
 
             $this->client = new Client([
                 'base_uri' => self::BASE_URL,
-                ...self::makeHandler()
-            ]);   
+                ...self::makeHandler(),
+            ]);
         }
-         
+
         $this->headers = ['headers' => [
             'Authorization' => 'Bearer '.$this->token,
             'Accept' => 'application/json',
@@ -81,7 +80,7 @@ class HttpClient
         }
     }
 
-    private function makeHandler():array
+    private function makeHandler(): array
     {
         $historyMiddleware = Middleware::history($this->history);
         $stack = HandlerStack::create();
@@ -98,8 +97,8 @@ class HttpClient
     public function lastRequest()
     {
         $request = end($this->history)['request'] ?? null;
-        if($request) {
-            return $request->getUri() . '';
+        if ($request) {
+            return $request->getUri().'';
         }
         // if ($lastRequest) {
         //     $request = $lastRequest['request'];

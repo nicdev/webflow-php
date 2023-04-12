@@ -12,8 +12,8 @@ class Webflow extends HttpClient
     /**
      * Webflow constructor.
      *
-     * @param string $token The API token for authentication.
-     * @param mixed $client An optional HTTP client instance.
+     * @param  string  $token The API token for authentication.
+     * @param  mixed  $client An optional HTTP client instance.
      */
     public function __construct(private $token, private $client = null)
     {
@@ -33,7 +33,7 @@ class Webflow extends HttpClient
     /**
      * Fetch a specific site.
      *
-     * @param string $siteId The ID of the site to fetch.
+     * @param  string  $siteId The ID of the site to fetch.
      * @return mixed The response from the API.
      */
     public function fetchSite(string $siteId)
@@ -44,7 +44,7 @@ class Webflow extends HttpClient
     /**
      * Publish a specific site.
      *
-     * @param string $siteId The ID of the site to publish.
+     * @param  string  $siteId The ID of the site to publish.
      * @return mixed The response from the API.
      */
     public function publishSite(string $siteId)
@@ -55,7 +55,7 @@ class Webflow extends HttpClient
     /**
      * Fetch the domains of a specific site.
      *
-     * @param string $siteId The ID of the site to fetch domains from.
+     * @param  string  $siteId The ID of the site to fetch domains from.
      * @return mixed The response from the API.
      */
     public function fetchSiteDomains(string $siteId)
@@ -66,7 +66,7 @@ class Webflow extends HttpClient
     /**
      * List all webhooks for a specific site.
      *
-     * @param string $siteId The ID of the site to list webhooks for.
+     * @param  string  $siteId The ID of the site to list webhooks for.
      * @return mixed The response from the API.
      */
     public function listWebhooks(string $siteId)
@@ -77,10 +77,11 @@ class Webflow extends HttpClient
     /**
      * Create a webhook for a specific site.
      *
-     * @param string $siteId The ID of the site to create a webhook for.
-     * @param string $triggerType The type of trigger for the webhook.
-     * @param string $url The URL for the webhook.
-     * @param array $filter An optional array of filters for the webhook.
+     * @param  string  $siteId The ID of the site to create a webhook for.
+     * @param  string  $triggerType The type of trigger for the webhook.
+     * @param  string  $url The URL for the webhook.
+     * @param  array  $filter An optional array of filters for the webhook.
+     *
      * @TODO Validate trigger types, set up filter stuff.
      */
     public function createWebhook(string $siteId, string $triggerType, string $url, array $filter = [])
@@ -91,8 +92,8 @@ class Webflow extends HttpClient
     /**
      * Delete a webhook for a specific site.
      *
-     * @param string $siteId The ID of the site to delete the webhook from.
-     * @param string $webhookId The ID of the webhook to delete.
+     * @param  string  $siteId The ID of the site to delete the webhook from.
+     * @param  string  $webhookId The ID of the webhook to delete.
      */
     public function deleteWebhook(string $siteId, string $webhookId)
     {
@@ -102,7 +103,7 @@ class Webflow extends HttpClient
     /**
      * List all collections for a specific site.
      *
-     * @param string $siteId The ID of the site to list collections for.
+     * @param  string  $siteId The ID of the site to list collections for.
      * @return mixed The response from the API.
      */
     public function listCollections(string $siteId)
