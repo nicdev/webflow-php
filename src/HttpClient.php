@@ -31,7 +31,7 @@ class HttpClient
         }
 
         $this->headers = ['headers' => [
-            'Authorization' => 'Bearer '.$this->token,
+            'Authorization' => 'Bearer ' . $this->token,
             'Accept' => 'application/json',
         ]];
     }
@@ -98,7 +98,7 @@ class HttpClient
     {
         $request = end($this->history)['request'] ?? null;
         if ($request) {
-            return $request->getUri().'';
+            return $request;
         }
         // if ($lastRequest) {
         //     $request = $lastRequest['request'];
@@ -108,5 +108,28 @@ class HttpClient
         //     echo "Request URI: " . $request->getUri() . PHP_EOL;
         //     echo "Response status: " . $response->getStatusCode() . PHP_EOL;
         // }
+    }
+
+    /**
+     * Gets the next page from API
+     */
+    public function next()
+    {
+        if ($this->hasNextPage()) {
+            $requestParts = parse_url($this->lastRequest()->getUri() . '');
+            parse_str($requestParts['query'], $query);
+            $query['offset'] = $this->result['offset'] + $this->result['limit'];
+            $method = strtolower($this->lastRequest()->getMethod());
+
+            return $this->{$method}($requestParts['path'], $query);
+        }
+
+        return null;
+    }
+
+    private function hasNextPage()
+    {
+        return isset($this->result['total'], $this->result['limit'], $this->result['offset']) &&
+            ($this->result['total'] > $this->result['limit'] + $this->result['offset']);
     }
 }
