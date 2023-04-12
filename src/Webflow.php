@@ -37,6 +37,27 @@ class Webflow extends HttpClient
     // @TODO validate trigger types, set up filter stuff
     public function createWebhook(string $siteId, string $triggerType, string $url, array $filter = [])
     {
-        $this->client->post('/webhooks/'.$siteId);
+        $this->post('/webhooks/'.$siteId);
+    }
+
+    public function deleteWebhook(string $siteId, string $webhookId)
+    {
+        $this->delete('/webhooks/'.$siteId.'/'.$webhookId);
+    }
+
+    public function listCollections(string $siteId)
+    {
+        return $this->get('/sites/'.$siteId.'/collections');
+    }
+
+    public function fetchCollection(string $collectionId)
+    {
+        return $this->get('/collections/'.$collectionId);
+    }
+
+    public function listItems(string $collectionId, int $page = 0)
+    {
+        $offset = $page * 100;
+        return $this->get('/collections/'.$collectionId.'/items', ['limit' => 100, 'offset' => $offset]);
     }
 }

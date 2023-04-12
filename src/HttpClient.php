@@ -24,9 +24,9 @@ class HttpClient
         ]];
     }
 
-    public function get($path): array
+    public function get($path, array $query = []): array
     {
-        $response = $this->client->get($path, $this->headers);
+        $response = $this->client->get($path, [...$this->headers, 'query' => $query]);
 
         return $this->respond($response);
     }
@@ -38,13 +38,35 @@ class HttpClient
         return $this->respond($response);
     }
 
+    public function delete($path): array
+    {
+        $response = $this->client->delete($path, $this->headers);
+
+        return $this->respond($response);
+    }
+
+    public function put($path): array
+    {
+        $response = $this->client->put($path, $this->headers);
+
+        return $this->respond($response);
+    }
+
+    public function patch($path): array
+    {
+        $response = $this->client->patch($path, $this->headers);
+
+        return $this->respond($response);
+    }
+
     public function respond($response): array
     {
         if ($response->getStatusCode() === 200) {
             $this->result = json_decode($response->getBody(), true);
-
+            
             return $this->result;
         }
+        
         throw new Exception('Webflow API Error: '.$response->getStatusCode().' '.$response->getReasonPhrase());
     }
 
