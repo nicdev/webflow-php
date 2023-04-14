@@ -127,7 +127,6 @@ class Webflow extends HttpClient
      * Create an item in a specific collection.
      * @param  string  $collectionId The ID of the collection to create the item in.
      * @param  array  $fields An array of fields to create the item with.
-     *  @TODO query param "live"
      */
     public function createItem(string $collectionId, array $fields, $live = false)
     {
