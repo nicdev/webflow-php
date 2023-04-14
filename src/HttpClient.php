@@ -2,7 +2,6 @@
 
 namespace Nicdev\WebflowSdk;
 
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
@@ -18,7 +17,7 @@ class HttpClient
         private $result = [],
         private $history = [],
     ) {
-        if($client) {
+        if ($client) {
             $this->client = $client;
         } else {
             // $historyMiddleware = Middleware::history($this->history);
@@ -27,26 +26,30 @@ class HttpClient
 
             $this->client = new Client([
                 'base_uri' => self::BASE_URL,
-                ...self::makeHandler()
-            ]);   
+                ...self::makeHandler(),
+            ]);
         }
-         
+
         $this->headers = ['headers' => [
-            'Authorization' => 'Bearer '.$this->token,
+            'Authorization' => 'Bearer ' . $this->token,
             'Accept' => 'application/json',
         ]];
     }
 
     public function get($path, array $query = []): array
     {
+        ray('called get');
+        ray($query);
         $response = $this->client->get($path, [...$this->headers, 'query' => $query]);
 
         return $this->respond($response);
     }
 
-    public function post($path): array
+    public function post($path, $payload): array
     {
-        $response = $this->client->post($path, $this->headers);
+        // echo json_encode([...$this->headers, 'json' => $payload]);
+        // die();
+        $response = $this->client->post($path, [...$this->headers, 'json' => $payload]);
 
         return $this->respond($response);
     }
@@ -74,14 +77,13 @@ class HttpClient
 
     public function respond($response): array
     {
+        $this->result = json_decode($response->getBody(), true);
         if ($response->getStatusCode() === 200) {
-            $this->result = json_decode($response->getBody(), true);
-
             return $this->result;
         }
     }
 
-    private function makeHandler():array
+    private function makeHandler(): array
     {
         $historyMiddleware = Middleware::history($this->history);
         $stack = HandlerStack::create();
@@ -98,16 +100,14 @@ class HttpClient
     public function lastRequest()
     {
         $request = end($this->history)['request'] ?? null;
-        if($request) {
-            return $request->getUri() . '';
+        if ($request) {
+            return $request;
         }
-        // if ($lastRequest) {
-        //     $request = $lastRequest['request'];
-        //     $response = $lastRequest['response'];
+    }
 
-        //     echo "Request method: " . $request->getMethod() . PHP_EOL;
-        //     echo "Request URI: " . $request->getUri() . PHP_EOL;
-        //     echo "Response status: " . $response->getStatusCode() . PHP_EOL;
-        // }
+    public function hasNextPage()
+    {
+        return isset($this->result['total'], $this->result['limit'], $this->result['offset']) &&
+            ($this->result['total'] > $this->result['limit'] + $this->result['offset']);
     }
 }
