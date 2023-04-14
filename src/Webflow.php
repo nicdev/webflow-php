@@ -116,17 +116,24 @@ class Webflow extends HttpClient
         return $this->get('/collections/'.$collectionId);
     }
 
-    public function listItems(string $collectionId, int $page = 0)
+    public function listItems(string $collectionId, int $page = 1)
     {
-        $offset = $page * 100;
+        $offset = ($page - 1) * 100;
 
         return $this->get('/collections/'.$collectionId.'/items', ['limit' => 100, 'offset' => $offset]);
     }
 
-    public function listItemsCursor(string $collectionId): Webflow
+    /**
+     * Create an item in a specific collection.
+     * @param  string  $collectionId The ID of the collection to create the item in.
+     * @param  array  $fields An array of fields to create the item with.
+     *  @TODO query param "live"
+     */
+    public function createItem(string $collectionId, array $fields, $live = false)
     {
-        // @TODO this will return an isntance of the class itself, and allow for chaining
-        // with $this->next() and $this->prev() methods
-        return $this;
+        $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
+        $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
+        $url = $live ? '/collections/'.$collectionId.'/items?live=true' : '/collections/'.$collectionId.'/items';
+        return $this->post($url, ['fields' => $fields]);
     }
 }
