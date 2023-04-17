@@ -59,7 +59,7 @@ it('publishes a site', function () {
 
 it('gets site\'s domains', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->fetchSiteDomains('foo');
+    $data = $this->webflowApiClient->listDomains('foo');
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('GET');
     expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/domains');

@@ -38,17 +38,13 @@ class HttpClient
 
     public function get($path, array $query = []): array
     {
-        ray('called get');
-        ray($query);
         $response = $this->client->get($path, [...$this->headers, 'query' => $query]);
 
         return $this->respond($response);
     }
 
-    public function post($path, $payload): array
+    public function post($path, $payload = []): array
     {
-        // echo json_encode([...$this->headers, 'json' => $payload]);
-        // die();
         $response = $this->client->post($path, [...$this->headers, 'json' => $payload]);
 
         return $this->respond($response);

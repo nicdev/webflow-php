@@ -2,6 +2,9 @@
 
 namespace Nicdev\WebflowSdk;
 
+use Exception;
+use Nicdev\WebflowSdk\Enums\WebhookTypes;
+
 /**
  * Class Webflow
  *
@@ -58,7 +61,7 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to fetch domains from.
      * @return mixed The response from the API.
      */
-    public function fetchSiteDomains(string $siteId)
+    public function listDomains(string $siteId)
     {
         return $this->get('/sites/'.$siteId.'/domains');
     }
@@ -86,7 +89,10 @@ class Webflow extends HttpClient
      */
     public function createWebhook(string $siteId, string $triggerType, string $url, array $filter = [])
     {
-        $this->post('/webhooks/'.$siteId);
+        if (!in_array($triggerType, WebhookTypes::toArray())) {
+            throw new Exception("Invalid trigger type provided");
+        }
+        $this->post('/sites/'.$siteId.'/webhooks', [...$filter, 'triggerType' => $triggerType, 'url' => $url]);
     }
 
     /**
@@ -97,7 +103,7 @@ class Webflow extends HttpClient
      */
     public function deleteWebhook(string $siteId, string $webhookId)
     {
-        $this->delete('/webhooks/'.$siteId.'/'.$webhookId);
+        $this->delete('/sites/'.$siteId.'/webhooks/'.$webhookId);
     }
 
     /**
