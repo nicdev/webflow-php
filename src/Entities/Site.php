@@ -29,6 +29,6 @@ class Site {
     }
 
     public function publish() {
-        return $this->webflow->post('/sites/'.$this->id.'/publish');
+        return $this->webflow->publishSite($this->id);
     }
 }
