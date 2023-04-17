@@ -45,10 +45,8 @@ class HttpClient
         return $this->respond($response);
     }
 
-    public function post($path, $payload): array
+    public function post($path, $payload = []): array
     {
-        // echo json_encode([...$this->headers, 'json' => $payload]);
-        // die();
         $response = $this->client->post($path, [...$this->headers, 'json' => $payload]);
 
         return $this->respond($response);

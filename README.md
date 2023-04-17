@@ -25,7 +25,7 @@ $site = $webflow->fetchSite('site_id');
 $webflow->publishSite('site_id');
 
 // Fetch a site's domains
-$domains = $webflow->fetchSiteDomains('site_id');
+$domains = $webflow->fetchDomains('site_id');
 
 // List all webhooks for a site
 $webhooks = $webflow->listWebhooks('site_id');
