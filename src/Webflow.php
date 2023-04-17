@@ -3,6 +3,7 @@
 namespace Nicdev\WebflowSdk;
 
 use Exception;
+use Nicdev\WebflowSdk\Entities\Site;
 use Nicdev\WebflowSdk\Enums\WebhookTypes;
 
 /**
@@ -41,7 +42,9 @@ class Webflow extends HttpClient
      */
     public function fetchSite(string $siteId)
     {
-        return $this->get('/sites/'.$siteId);
+        //return $this->get('/sites/'.$siteId);
+        $siteData = $this->get('/sites/'.$siteId);
+        return new Site($siteData, $this);
     }
 
     /**
