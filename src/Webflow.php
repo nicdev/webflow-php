@@ -61,7 +61,7 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to fetch domains from.
      * @return mixed The response from the API.
      */
-    public function fetchDomains(string $siteId)
+    public function listDomains(string $siteId)
     {
         return $this->get('/sites/'.$siteId.'/domains');
     }
@@ -103,7 +103,7 @@ class Webflow extends HttpClient
      */
     public function deleteWebhook(string $siteId, string $webhookId)
     {
-        $this->delete('/webhooks/'.$siteId.'/'.$webhookId);
+        $this->delete('/sites/'.$siteId.'/webhooks/'.$webhookId);
     }
 
     /**
