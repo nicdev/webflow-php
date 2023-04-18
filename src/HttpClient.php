@@ -20,10 +20,6 @@ class HttpClient
         if ($client) {
             $this->client = $client;
         } else {
-            // $historyMiddleware = Middleware::history($this->history);
-            // $stack = HandlerStack::create();
-            // $stack->push($historyMiddleware);
-
             $this->client = new Client([
                 'base_uri' => self::BASE_URL,
                 ...self::makeHandler(),
@@ -77,6 +73,7 @@ class HttpClient
         if ($response->getStatusCode() === 200) {
             return $this->result;
         }
+        return [];
     }
 
     private function makeHandler(): array
