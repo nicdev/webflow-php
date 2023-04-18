@@ -50,7 +50,7 @@ it('deletes a webhook', function () {
     $data = $this->webflowApiClient->deleteWebhook('foo', 'bar');
     expect($data)->toBeNull();
     expect($this->container[0]['request']->getMethod())->toBe('DELETE');
-    expect($this->container[0]['request']->getUri()->getPath())->toBe('/webhooks/foo/bar');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/webhooks/bar');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
