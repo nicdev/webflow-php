@@ -23,6 +23,16 @@ class Webflow extends HttpClient
         parent::__construct($token, $client);
     }
 
+    public function user()
+    {
+        return $this->get('/user');
+    }
+
+    public function authInfo()
+    {
+        return $this->get('/info');
+    }
+
     /**
      * List all sites.
      *
@@ -76,6 +86,13 @@ class Webflow extends HttpClient
     {
         return $this->get('/sites/'.$siteId.'/webhooks');
     }
+
+    
+    public function getWebhook(string $siteId, string $webhookId)
+    {
+        return $this->get('/sites/'.$siteId.'/webhooks/'.$webhookId);
+    }
+    
 
     /**
      * Create a webhook for a specific site.
