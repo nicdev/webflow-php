@@ -31,4 +31,18 @@ class Site {
     public function publish() {
         return $this->webflow->publishSite($this->id);
     }
+
+    // @TODO implement or are they not a first class entity?
+    public function domains() {
+        return $this->webflow->listDomains($this->id);
+    }
+
+    public function collections() {
+        $response = $this->webflow->listCollections($this->id);
+        return array_map(function($collectionData) {
+            return new Collection($collectionData, $this->webflow);
+        }, $response);
+    }
+
+    
 }

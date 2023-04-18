@@ -42,9 +42,9 @@ class Webflow extends HttpClient
      */
     public function fetchSite(string $siteId)
     {
-        //return $this->get('/sites/'.$siteId);
         $siteData = $this->get('/sites/'.$siteId);
         return new Site($siteData, $this);
+        // return $this->get('/sites/'.$siteId);
     }
 
     /**
