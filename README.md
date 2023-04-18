@@ -1,6 +1,8 @@
 # Webflow SDK
 This is a PHP SDK for interacting with the Webflow API. It is built on top of the Guzzle HTTP client and provides several convenience methods for common Webflow API requests.
 
+## BEWARE! This is a super early version in active development. There isn't even a tag on this repo. So please be careful if you decide to use it ✌️
+
 ## Installation
 You can install the SDK via Composer:
 
