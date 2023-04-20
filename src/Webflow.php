@@ -28,7 +28,7 @@ class Webflow extends HttpClient
      *
      * @return array The response from the API.
      */
-    public function user()
+    public function user(): array
     {
         return $this->get('/user');
     }
@@ -38,7 +38,7 @@ class Webflow extends HttpClient
      *
      * @return array The response from the API.
      */
-    public function authInfo()
+    public function authInfo(): array
     {
         return $this->get('/info');
     }
@@ -48,7 +48,7 @@ class Webflow extends HttpClient
      *
      * @return array The response from the API.
      */
-    public function listSites()
+    public function listSites(): array
     {
         return $this->get('/sites');
     }
@@ -59,7 +59,7 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to fetch.
      * @return array The response from the API.
      */
-    public function getSite(string $siteId)
+    public function getSite(string $siteId): array
     {
         return $this->get('/sites/'.$siteId);
     }
@@ -70,7 +70,7 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to publish.
      * @return array The response from the API.
      */
-    public function publishSite(string $siteId)
+    public function publishSite(string $siteId): array
     {
         return $this->post('/sites/'.$siteId.'/publish');
     }
@@ -81,7 +81,7 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to list domains for.
      * @return array The response from the API.
      */
-    public function listDomains(string $siteId)
+    public function listDomains(string $siteId): array
     {
         return $this->get('/sites/'.$siteId.'/domains');
     }
@@ -92,7 +92,7 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to list webhooks for.
      * @return array The response from the API.
      */
-    public function listWebhooks(string $siteId)
+    public function listWebhooks(string $siteId): array
     {
         return $this->get('/sites/'.$siteId.'/webhooks');
     }
@@ -104,7 +104,7 @@ class Webflow extends HttpClient
      * @param  string  $webhookId The ID of the webhook to fetch.
      * @return array The response from the API.
      */
-    public function getWebhook(string $siteId, string $webhookId)
+    public function getWebhook(string $siteId, string $webhookId): array
     {
         return $this->get('/sites/'.$siteId.'/webhooks/'.$webhookId);
     }
@@ -117,7 +117,7 @@ class Webflow extends HttpClient
      * @param  string  $url The URL for the webhook.
      * @param  array  $filter An optional array of filters for the webhook.
      */
-    public function createWebhook(string $siteId, string $triggerType, string $url, array $filter = [])
+    public function createWebhook(string $siteId, string $triggerType, string $url, array $filter = []): array
     {
         if (! in_array($triggerType, WebhookTypes::toArray())) {
             throw new Exception('Invalid trigger type provided');
@@ -131,9 +131,9 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to delete the webhook from.
      * @param  string  $webhookId The ID of the webhook to delete.
      */
-    public function deleteWebhook(string $siteId, string $webhookId)
+    public function deleteWebhook(string $siteId, string $webhookId): array
     {
-        $this->delete('/sites/'.$siteId.'/webhooks/'.$webhookId);
+        return $this->delete('/sites/'.$siteId.'/webhooks/'.$webhookId);
     }
 
     /**
@@ -142,7 +142,7 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to list collections for.
      * @return array The response from the API.
      */
-    public function listCollections(string $siteId)
+    public function listCollections(string $siteId): array
     {
         return $this->get('/sites/'.$siteId.'/collections');
     }
@@ -153,7 +153,7 @@ class Webflow extends HttpClient
      * @param  string  $collectionId The ID of the collection to fetch.
      * @return array The response from the API.
      */
-    public function getCollection(string $collectionId)
+    public function getCollection(string $collectionId): array
     {
         return $this->get('/collections/'.$collectionId);
     }
@@ -165,7 +165,7 @@ class Webflow extends HttpClient
      * @param  int  $page The page number of items to retrieve.
      * @return array The response from the API.
      */
-    public function listItems(string $collectionId, int $page = 1)
+    public function listItems(string $collectionId, int $page = 1): array
     {
         $offset = ($page - 1) * 100;
 
@@ -178,7 +178,7 @@ class Webflow extends HttpClient
      * @param  string  $itemId The ID of the item to fetch.
      * @return array The response from the API.
      */
-    public function getItem(string $collectionId, string $itemId)
+    public function getItem(string $collectionId, string $itemId): array
     {
         return $this->get('/collections/'.$collectionId.'/items/'.$itemId);
     }
@@ -191,7 +191,7 @@ class Webflow extends HttpClient
      * @param  bool  $live Whether or not to publish the created item.
      * @return array The response from the API.
      */
-    public function createItem(string $collectionId, array $fields, $live = false)
+    public function createItem(string $collectionId, array $fields, $live = false): array
     {
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
@@ -206,7 +206,7 @@ class Webflow extends HttpClient
      * @param  string  $collectionId The ID of the collection that the item(s) belong to.
      * @param  array  $itemIds An array of item IDs to publish.
      */
-    public function publishItems(string $collectionId, array $itemIds)
+    public function publishItems(string $collectionId, array $itemIds): array
     {
         return $this->put('/collections/'.$collectionId.'/items/publish', ['itemIds' => $itemIds]);
     }
@@ -219,7 +219,7 @@ class Webflow extends HttpClient
      * @param  array  $fields An array of fields to update the item with.
      * @param  bool  $live whether or not to create the item should be published.
      */
-    public function updateItem(string $collectionId, string $itemId, array $fields, $live = false)
+    public function updateItem(string $collectionId, string $itemId, array $fields, $live = false): array
     {
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
@@ -239,7 +239,7 @@ class Webflow extends HttpClient
      * @note: I don't see a real difference between the update and patch methods
      * but they have been matched to their respective endpoints.
      */
-    public function patchItem(string $collectionId, string $itemId, array $fields, $live = false)
+    public function patchItem(string $collectionId, string $itemId, array $fields, $live = false): array
     {
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
@@ -255,7 +255,7 @@ class Webflow extends HttpClient
      * @param  string  $itemId The ID of the item to delete.
      * @param  bool  $live passing the live parameter will unpublish the item while keeping it in the collection
      */
-    public function deleteItem(string $collectionId, string $itemId, $live = false)
+    public function deleteItem(string $collectionId, string $itemId, $live = false): array
     {
         $url = $live ? '/collections/'.$collectionId.'/items/'.$itemId.'?live=true' : '/collections/'.$collectionId.'/items/'.$itemId;
 
