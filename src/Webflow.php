@@ -188,4 +188,15 @@ class Webflow extends HttpClient
         $url = $live ? '/collections/' . $collectionId . '/items?live=true' : '/collections/' . $collectionId . '/items';
         return $this->post($url, ['fields' => $fields]);
     }
+
+    /**
+     * Publish one ore more items by their ID.
+     * 
+     * @param string $collectionId The ID of the collection that the item(s) belong to.
+     * @param  array  $itemIds An array of item IDs to publish.
+     */
+
+    public function publishItems(string $collectionId, array $itemIds) {
+        return $this->put('/collections/' . $collectionId . '/items/publish', ['itemIds' => $itemIds]);
+    }
 }
