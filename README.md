@@ -130,9 +130,66 @@ $fields = [
     'field-name' => 'field-value',
     // ...
 ];
-$live = false; // Optional live mode
+$live = false; // Optional publish
 
 $item = $webflow->createItem($collectionId, $fields, $live);
+```
+
+### Get an item by its ID
+
+```php
+$collectionId = 'your-collection-id';
+$itemId = 'your-item-id';
+
+$item = $webflow->getItem(string $collectionId, string $itemId)
+```
+
+### Publish one or more items by their ID
+
+```php
+$collectionId = 'your-collection-id';
+$itemIds = ['your-item-id', 'your-other-item-id'];
+    
+$webflow->publishItems($collection, $itemIds);
+```
+
+### Update an item by its ID
+
+```php
+$collectionId = 'your-collection-id';
+$itemId = 'your-item-id';
+$fields = $fields = [
+    'field-name' => 'field-value',
+    // ...
+];
+$live = false; // Optional publish 
+
+$webflow->updateItem(string $collectionId, string $itemId, array $fields, $live)
+```
+
+### Patch an item by its ID
+_I don't see a real difference between the update and patch methods but they have been matched to their respective endpoints. For more information see [the documentation](https://developers.webflow.com/reference/update-item)._
+
+```php
+$collectionId = 'your-collection-id';
+$itemId = 'your-item-id';
+$fields = $fields = [
+    'field-name' => 'field-value',
+    // ...
+];
+$live = false; // Optional publish 
+
+$webflow->updateItem(string $collectionId, string $itemId, array $fields, $live)
+```
+
+### Delete or un-publish an item by its ID
+
+```php
+$collectionId = 'your-collection-id';
+$itemId = 'your-item-id';
+$live = true; // Optional. When set to true the item will be un-published but kept in the collection
+
+$webflow->deleteItem(string $collectionId, string $itemId, $live = false)
 ```
 
 ## Contributing
