@@ -1,4 +1,5 @@
 <?php
+
 namespace Nicdev\WebflowSdk\Enums;
 
 enum WebhookTypes
