@@ -95,7 +95,7 @@ class HttpClient
 
         return $this->respond($response);
     }
-
+    
     /**
      * Send a PATCH request to the API.
      *
