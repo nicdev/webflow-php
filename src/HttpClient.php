@@ -89,9 +89,9 @@ class HttpClient
      * @param string $path The path of the API endpoint.
      * @return array The decoded JSON response from the API.
      */
-    public function put($path): array
+    public function put($path, $payload): array
     {
-        $response = $this->client->put($path, $this->headers);
+        $response = $this->client->put($path, [...$this->headers, 'json' => $payload]);
 
         return $this->respond($response);
     }
