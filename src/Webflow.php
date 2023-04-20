@@ -61,7 +61,7 @@ class Webflow extends HttpClient
      */
     public function getSite(string $siteId)
     {
-        return $this->get('/sites/' . $siteId);
+        return $this->get('/sites/'.$siteId);
     }
 
     /**
@@ -72,7 +72,7 @@ class Webflow extends HttpClient
      */
     public function publishSite(string $siteId)
     {
-        return $this->post('/sites/' . $siteId . '/publish');
+        return $this->post('/sites/'.$siteId.'/publish');
     }
 
     /**
@@ -83,7 +83,7 @@ class Webflow extends HttpClient
      */
     public function listDomains(string $siteId)
     {
-        return $this->get('/sites/' . $siteId . '/domains');
+        return $this->get('/sites/'.$siteId.'/domains');
     }
 
     /**
@@ -94,7 +94,7 @@ class Webflow extends HttpClient
      */
     public function listWebhooks(string $siteId)
     {
-        return $this->get('/sites/' . $siteId . '/webhooks');
+        return $this->get('/sites/'.$siteId.'/webhooks');
     }
 
     /**
@@ -106,7 +106,7 @@ class Webflow extends HttpClient
      */
     public function getWebhook(string $siteId, string $webhookId)
     {
-        return $this->get('/sites/' . $siteId . '/webhooks/' . $webhookId);
+        return $this->get('/sites/'.$siteId.'/webhooks/'.$webhookId);
     }
 
     /**
@@ -116,14 +116,13 @@ class Webflow extends HttpClient
      * @param  string  $triggerType The type of trigger for the webhook.
      * @param  string  $url The URL for the webhook.
      * @param  array  $filter An optional array of filters for the webhook.
-     *
      */
     public function createWebhook(string $siteId, string $triggerType, string $url, array $filter = [])
     {
-        if (!in_array($triggerType, WebhookTypes::toArray())) {
-            throw new Exception("Invalid trigger type provided");
+        if (! in_array($triggerType, WebhookTypes::toArray())) {
+            throw new Exception('Invalid trigger type provided');
         }
-        $this->post('/sites/' . $siteId . '/webhooks', [...$filter, 'triggerType' => $triggerType, 'url' => $url]);
+        $this->post('/sites/'.$siteId.'/webhooks', [...$filter, 'triggerType' => $triggerType, 'url' => $url]);
     }
 
     /**
@@ -134,7 +133,7 @@ class Webflow extends HttpClient
      */
     public function deleteWebhook(string $siteId, string $webhookId)
     {
-        $this->delete('/sites/' . $siteId . '/webhooks/' . $webhookId);
+        $this->delete('/sites/'.$siteId.'/webhooks/'.$webhookId);
     }
 
     /**
@@ -145,7 +144,7 @@ class Webflow extends HttpClient
      */
     public function listCollections(string $siteId)
     {
-        return $this->get('/sites/' . $siteId . '/collections');
+        return $this->get('/sites/'.$siteId.'/collections');
     }
 
     /**
@@ -156,7 +155,7 @@ class Webflow extends HttpClient
      */
     public function getCollection(string $collectionId)
     {
-        return $this->get('/collections/' . $collectionId);
+        return $this->get('/collections/'.$collectionId);
     }
 
     /**
@@ -170,7 +169,7 @@ class Webflow extends HttpClient
     {
         $offset = ($page - 1) * 100;
 
-        return $this->get('/collections/' . $collectionId . '/items', ['limit' => 100, 'offset' => $offset]);
+        return $this->get('/collections/'.$collectionId.'/items', ['limit' => 100, 'offset' => $offset]);
     }
 
     /**
@@ -181,7 +180,7 @@ class Webflow extends HttpClient
      */
     public function getItem(string $collectionId, string $itemId)
     {
-        return $this->get('/collections/' . $collectionId . '/items/' . $itemId);
+        return $this->get('/collections/'.$collectionId.'/items/'.$itemId);
     }
 
     /**
@@ -196,24 +195,25 @@ class Webflow extends HttpClient
     {
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
-        $url = $live ? '/collections/' . $collectionId . '/items?live=true' : '/collections/' . $collectionId . '/items';
+        $url = $live ? '/collections/'.$collectionId.'/items?live=true' : '/collections/'.$collectionId.'/items';
+
         return $this->post($url, ['fields' => $fields]);
     }
 
     /**
      * Publish one ore more items by their ID.
-     * 
-     * @param string $collectionId The ID of the collection that the item(s) belong to.
+     *
+     * @param  string  $collectionId The ID of the collection that the item(s) belong to.
      * @param  array  $itemIds An array of item IDs to publish.
      */
-
-    public function publishItems(string $collectionId, array $itemIds) {
-        return $this->put('/collections/' . $collectionId . '/items/publish', ['itemIds' => $itemIds]);
+    public function publishItems(string $collectionId, array $itemIds)
+    {
+        return $this->put('/collections/'.$collectionId.'/items/publish', ['itemIds' => $itemIds]);
     }
 
     /**
      * Update and item by its ID.
-     * 
+     *
      * @param  string  $collectionId The ID of the collection that the item belongs to.
      * @param  string  $itemId The ID of the item to update.
      * @param  array  $fields An array of fields to update the item with.
@@ -223,19 +223,19 @@ class Webflow extends HttpClient
     {
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
-        $url = $live ? '/collections/' . $collectionId . '/items/' . $itemId . '?live=true' : '/collections/' . $collectionId . '/items/' . $itemId;
-        
+        $url = $live ? '/collections/'.$collectionId.'/items/'.$itemId.'?live=true' : '/collections/'.$collectionId.'/items/'.$itemId;
+
         return $this->put($url, ['fields' => $fields]);
     }
 
     /**
      * Patch and item by its ID.
-     * 
+     *
      * @param  string  $collectionId The ID of the collection that the item belongs to.
      * @param  string  $itemId The ID of the item to update.
      * @param  array  $fields An array of fields to update the item with.
      * @param  bool  $live whether or not to create the item should be published.
-     * 
+     *
      * @note: I don't see a real difference between the update and patch methods
      * but they have been matched to their respective endpoints.
      */
@@ -243,23 +243,22 @@ class Webflow extends HttpClient
     {
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
-        $url = $live ? '/collections/' . $collectionId . '/items/' . $itemId . '?live=true' : '/collections/' . $collectionId . '/items/' . $itemId;
+        $url = $live ? '/collections/'.$collectionId.'/items/'.$itemId.'?live=true' : '/collections/'.$collectionId.'/items/'.$itemId;
+
         return $this->put($url, ['fields' => $fields]);
     }
 
     /**
      * Delete an item by its ID.
-     * 
+     *
      * @param  string  $collectionId The ID of the collection that the item belongs to.
      * @param  string  $itemId The ID of the item to delete.
      * @param  bool  $live passing the live parameter will unpublish the item while keeping it in the collection
      */
     public function deleteItem(string $collectionId, string $itemId, $live = false)
     {
-        $url = $live ? '/collections/' . $collectionId . '/items/' . $itemId . '?live=true' : '/collections/' . $collectionId . '/items/' . $itemId;
+        $url = $live ? '/collections/'.$collectionId.'/items/'.$itemId.'?live=true' : '/collections/'.$collectionId.'/items/'.$itemId;
+
         return $this->delete($url);
     }
-
-
-
 }
