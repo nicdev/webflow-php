@@ -48,7 +48,7 @@ it('creates a webhook', function () {
 it('deletes a webhook', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $data = $this->webflowApiClient->deleteWebhook('foo', 'bar');
-    expect($data)->toBeNull();
+    expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('DELETE');
     expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/webhooks/bar');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
