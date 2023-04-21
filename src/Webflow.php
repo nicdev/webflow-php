@@ -261,4 +261,18 @@ class Webflow extends HttpClient
 
         return $this->delete($url);
     }
+
+    /**
+     * List products/SKUs for a specific site by its ID.
+     *
+     * @param  string  $siteId The ID of the site.
+     * @param  int  $page The page number of items to retrieve
+     * @return array The response from the API.
+     */
+    public function listProducts(string $siteId, int $page = 1): array
+    {
+        $offset = ($page - 1) * 100;
+
+        return $this->get('/sites/'.$siteId.'/products', ['limit' => 100, 'offset' => $offset]);
+    }
 }
