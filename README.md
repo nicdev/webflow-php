@@ -23,6 +23,15 @@ $token = 'your-webflow-api-token';
 $webflow = new Webflow($token);
 ```
 
+### Set the page size. By default all paged requests are limited to 100 (maximum allowed)
+
+```php
+$webflow->setPageSize(25);
+
+// It can be chanined to other methods
+$webflow->setPageSize(25)->listItems('your-collection-id', 3); // Gets 25 items, 50-75
+```
+
 ### Get the current user's information
 
 ```php
