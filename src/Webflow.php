@@ -3,6 +3,8 @@
 namespace Nicdev\WebflowSdk;
 
 use Exception;
+use Nicdev\WebflowSdk\Enums\InventoryQuantityFields;
+use Nicdev\WebflowSdk\Enums\OrderUpdateFields;
 use Nicdev\WebflowSdk\Enums\WebhookTypes;
 
 /**
@@ -12,6 +14,9 @@ use Nicdev\WebflowSdk\Enums\WebhookTypes;
  */
 class Webflow extends HttpClient
 {
+
+    protected int $pageSize = 100;
+    
     /**
      * Webflow constructor.
      *
@@ -21,6 +26,16 @@ class Webflow extends HttpClient
     public function __construct(private $token, private $client = null)
     {
         parent::__construct($token, $client);
+    }
+
+    /**
+     * Set page size for paginated requests.
+     */
+    public function setPageSize(int $pageSize): Webflow
+    {
+        $this->pageSize = $pageSize;
+        
+        return $this;
     }
 
     /**
@@ -167,9 +182,9 @@ class Webflow extends HttpClient
      */
     public function listItems(string $collectionId, int $page = 1): array
     {
-        $offset = ($page - 1) * 100;
+        $offset = ($page - 1) * $this->pageSize;
 
-        return $this->get('/collections/'.$collectionId.'/items', ['limit' => 100, 'offset' => $offset]);
+        return $this->get('/collections/'.$collectionId.'/items', ['limit' => $this->pageSize, 'offset' => $offset]);
     }
 
     /**
@@ -269,9 +284,9 @@ class Webflow extends HttpClient
      */
     public function listProducts(string $siteId, int $page = 1): array
     {
-        $offset = ($page - 1) * 100;
+        $offset = ($page - 1) * $this->pageSize;
 
-        return $this->get('/sites/'.$siteId.'/products', ['limit' => 100, 'offset' => $offset]);
+        return $this->get('/sites/'.$siteId.'/products', ['limit' => $this->pageSize, 'offset' => $offset]);
     }
 
     /** Adding a new Product involves creating both a Product Item and a SKU Item, 
@@ -285,7 +300,7 @@ class Webflow extends HttpClient
         $product['_draft'] = isset($product['_draft']) ? $product['_draft'] : false;
         $sku['_archived'] = isset($sku['_archived']) ? $sku['_archived'] : false;
         
-        return $this->post('/sites/'.$siteId.'/products', ['product' => ['fields' => $product], ['sku' => ['fields' => $sku]]);
+        return $this->post('/sites/'.$siteId.'/products', ['product' => ['fields' => $product], ['sku' => ['fields' => $sku]]]);
     }
 
     /**
@@ -339,5 +354,122 @@ class Webflow extends HttpClient
         return $this->patch('/sites/'.$siteId.'/products/'.$productId.'/skus/'.$skuId, ['sku' => ['fields' => $fields]]);
     }
 
+    /**
+     * Inventory for a specific item by its ID.
+     * 
+     * @param  string  $collectionId The ID of the collection that the item belongs to (likely to be the SKUs collection.)
+     * @param  string  $skuId The ID of the sku item to fetch the inventory for.
+     */
+    public function getInventory(string $collectionId, string $skuId): array
+    {
+        return $this->get('/collections/'.$collectionId.'/items/'.$skuId.'/inventory');
+    }
 
+    /**
+     * Update inventory for a specific item by its ID.
+     * 
+     * @param  string  $collectionId The ID of the collection that the item belongs to (likely to be the SKUs collection.)
+     * @param  string  $skuId The ID of the sku item to update the inventory for.
+     * @param  array  $inventory An array of fields to update the inventory with 
+     * * inventoryType: infinite/finite
+     * * updateQuantity: integer // Adds this quantity to currently store quantity. Can be negative.
+     * * quantity: integer // Sets the quantity to this number. Takes precendence over updateQuantity.
+     */
+    public function updateInventory(string $collectionId, string $skuId, array $fields): array
+    {
+        array_map(function ($fieldName) {
+            if (!in_array($fieldName, InventoryQuantityFields::toArray())) {
+                throw new \Exception('Only the fields ' . implode(', ', InventoryQuantityFields::toArray()) .' are allowed to be updated.');
+            }
+        }, array_keys($fields));
+        
+        return $this->patch('/collections/'.$collectionId.'/items/'.$skuId.'/inventory', ['fields' => $fields]);
+    }
+
+    /**
+     * Get orders for a specific site by its ID.
+     * 
+     * @param  string  $siteId The ID of the site.
+     * @param  int  $page The page number of items to retrieve
+     * @return array The response from the API.
+     */
+    public function listOrders(string $siteId, int $page = 1): array
+    {
+        $offset = ($page - 1) * $this->pageSize;
+
+        return $this->get('/sites/'.$siteId.'/orders', ['limit' => $this->pageSize, 'offset' => $offset]);
+    }
+
+    /**
+     * Get a specific order by its ID.
+     * 
+     * @param  string  $siteId The ID of the site.
+     * @param  string  $orderId The ID of the order to fetch.
+     * @return array The response from the API.
+     */
+    public function getOrder(string $siteId, string $orderId): array
+    {
+        return $this->get('/sites/'.$siteId.'/orders/'.$orderId);
+    }
+
+    /**
+     * Update a specific order by its ID.
+     * 
+     * @param  string  $siteId The ID of the site.
+     * @param  string  $orderId The ID of the order to update.
+     * @param  array  $fields An array of fields to update the order with.
+     */
+    public function updateOrder(string $siteId, string $orderId, array $fields): array
+    {
+        array_map(function ($fieldName) {
+                    if (!in_array($fieldName, OrderUpdateFields::toArray())) {
+                        throw new \Exception('Only the fields ' . implode(', ', OrderUpdateFields::toArray()) .' are allowed to be updated.');
+                    }
+                }, array_keys($fields));
+            
+        return $this->patch('/sites/'.$siteId.'/orders/'.$orderId, ['fields' => $fields]);
+    }
+
+    /**
+     * Fulfill and order by its ID.
+     * 
+     * @param  string  $siteId The ID of the site.
+     * @param  string  $orderId The ID of the order to fulfill.
+     * @param bool $notifyCustomer Whether or not to notify the customer of the fulfillment.
+     */
+    public function fulfillOrder(string $siteId, string $orderId, bool $notifyCustomer = false): array
+    {
+        return $this->post('/sites/'.$siteId.'/orders/'.$orderId.'/fulfill', ['sendOrderFulfilledEmail' => $notifyCustomer]);
+    }
+
+    /**
+     * Unfulfill an order by its ID.
+     * 
+     * @param  string  $siteId The ID of the site.
+     * @param  string  $orderId The ID of the order to unfulfill.
+     */
+    public function unfulfillOrder(string $siteId, string $orderId): array
+    {
+        return $this->post('/sites/'.$siteId.'/orders/'.$orderId.'/unfulfill');
+    }
+
+    /**
+     * Refund an order by its ID. Reverses a Stripe charge and refunds an order back to a
+     * customer. It will also set the order's status to refunded.
+     * 
+     * @param  string  $siteId The ID of the site.
+     * @param  string  $orderId The ID of the order to refund.
+     */
+    public function refundOrder(string $siteId, string $orderId): array
+    {
+        return $this->post('/sites/'.$siteId.'/orders/'.$orderId.'/refund');
+    }
+
+    /**
+     * Get ecommerce settings for a specific site by its ID.
+     */
+    public function getEcommerceSettings(string $siteId): array
+    {
+        return $this->get('/sites/'.$siteId.'/ecommerce/settings');
+    }
 }
