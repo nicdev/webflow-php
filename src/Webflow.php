@@ -221,8 +221,6 @@ class Webflow extends HttpClient
      */
     public function updateItem(string $collectionId, string $itemId, array $fields, $live = false): array
     {
-        $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
-        $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
         $url = $live ? '/collections/'.$collectionId.'/items/'.$itemId.'?live=true' : '/collections/'.$collectionId.'/items/'.$itemId;
 
         return $this->put($url, ['fields' => $fields]);
@@ -275,4 +273,71 @@ class Webflow extends HttpClient
 
         return $this->get('/sites/'.$siteId.'/products', ['limit' => 100, 'offset' => $offset]);
     }
+
+    /** Adding a new Product involves creating both a Product Item and a SKU Item, 
+     * since a Product Item has to have, at minimum, a SKU Item.
+     * @param  string  $siteId The ID of the site.
+     * @param  array  $product An array of fields to create the product with.
+     * @param  array  $sku An array of fields to create the sku with.
+     */
+    public function createProductAndSku(string $siteId, array $product, array $sku): array
+    {
+        $product['_draft'] = isset($product['_draft']) ? $product['_draft'] : false;
+        $sku['_archived'] = isset($sku['_archived']) ? $sku['_archived'] : false;
+        
+        return $this->post('/sites/'.$siteId.'/products', ['product' => ['fields' => $product], ['sku' => ['fields' => $sku]]);
+    }
+
+    /**
+     * Get a specific product by its ID.
+     * 
+     * @param  string  $siteId The ID of the site.
+     * @param  string  $productId The ID of the product to fetch.
+     */
+    public function getProduct(string $siteId, string $productId): array
+    {
+        return $this->get('/sites/'.$siteId.'/products/'.$productId);
+    }
+
+    /**
+     * Update a specific product by its ID.
+     * 
+     * @param  string  $siteId The ID of the site.
+     * @param  string  $productId The ID of the product to update.
+     * @param  array  $product An array of fields to update the product with.
+     */
+    public function updateProduct(string $siteId, string $productId, array $fields): array
+    {
+        return $this->patch('/sites/'.$siteId.'/products/'.$productId, ['fields' => $fields]);
+    }
+
+    /** 
+     * Create a SKU for a product
+     * 
+     * @param  string  $siteId The ID of the site.
+     * @param  string  $productId The ID of the product to create the SKU for.
+     * @param  array  $sku An array of fields to create the sku with.
+     */
+    public function createSku(string $siteId, string $productId, array $fields): array
+    {
+        $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
+        $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
+        
+        return $this->post('/sites/'.$siteId.'/products/'.$productId.'/skus', ['sku' => ['fields' => $fields]]);
+    }
+
+    /**
+     * Update a SKU for a product by its ID.
+     * 
+     * @param  string  $siteId The ID of the site.
+     * @param  string  $productId The ID of the product to update the SKU for.
+     * @param  string  $skuId The ID of the SKU to update.
+     * @param  array  $sku An array of fields to update the sku with.    
+     */
+    public function updateSku(string $siteId, string $productId, string $skuId, array $fields): array
+    {
+        return $this->patch('/sites/'.$siteId.'/products/'.$productId.'/skus/'.$skuId, ['sku' => ['fields' => $fields]]);
+    }
+
+
 }
