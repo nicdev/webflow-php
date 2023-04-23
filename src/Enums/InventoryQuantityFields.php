@@ -6,7 +6,7 @@ enum InventoryQuantityFields
 {
     case quantity;
     case updateQuantity;
-    case updateQuantity;
+    case inventoryType;
 
     public static function toArray(): array
     {
