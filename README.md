@@ -23,15 +23,6 @@ $token = 'your-webflow-api-token';
 $webflow = new Webflow($token);
 ```
 
-### Set the page size. By default all paged requests are limited to 100 (maximum allowed)
-
-```php
-$webflow->setPageSize(25);
-
-// It can be chanined to other methods
-$webflow->setPageSize(25)->listItems('your-collection-id', 3); // Gets 25 items, 50-75
-```
-
 ### Get the current user's information
 
 ```php
@@ -139,18 +130,17 @@ $fields = [
     'field-name' => 'field-value',
     // ...
 ];
-$live = false; // Optional publish
+$live = false; // Optional live mode
 
 $item = $webflow->createItem($collectionId, $fields, $live);
 ```
-
 ### Get an item by its ID
 
 ```php
 $collectionId = 'your-collection-id';
 $itemId = 'your-item-id';
 
-$item = $webflow->getItem(string $collectionId, string $itemId)
+$item = $webflow->getItem($collectionId, $itemId)
 ```
 
 ### Publish one or more items by their ID
@@ -173,7 +163,7 @@ $fields = $fields = [
 ];
 $live = false; // Optional publish 
 
-$webflow->updateItem(string $collectionId, string $itemId, array $fields, $live)
+$webflow->updateItem($collectionId, $itemId, $fields, $live)
 ```
 
 ### Patch an item by its ID
@@ -188,7 +178,7 @@ $fields = $fields = [
 ];
 $live = false; // Optional publish 
 
-$webflow->updateItem(string $collectionId, string $itemId, array $fields, $live)
+$webflow->updateItem($collectionId, $itemId, $fields, $live)
 ```
 
 ### Delete or un-publish an item by its ID
@@ -198,7 +188,176 @@ $collectionId = 'your-collection-id';
 $itemId = 'your-item-id';
 $live = true; // Optional. When set to true the item will be un-published but kept in the collection
 
-$webflow->deleteItem(string $collectionId, string $itemId, $live = false)
+$webflow->deleteItem($collectionId, $itemId, $live)
+```
+
+### List products/SKUs for a specific site by its ID.
+
+
+```php
+$siteId = 'your-site-id';
+$page = 1; // Optional page number
+$webflow->listProducts($siteId, $page);
+```
+
+### Create a Product and SKU
+
+```php
+$siteId = 'your-site-id';
+$product = [
+    'slug' = 'foo-bar',
+    'name' => 'Foo Bar',
+];
+$sku = [
+    'slug' => 'foo-bar-small',
+    'name' => 'Foo Bar (S)',
+    'price' => [
+        'value' => 990,
+        'unit' => 'USD'
+    ]
+]; // Optional
+$webflow->createProductAndSku($siteId, $product, $sku)
+```
+
+### Get Products and SKUs
+
+```php
+$siteId = 'your-site-id';
+$productId = 'your-product-id';
+
+$webflow->getProduct($site, $product);
+```
+
+### Update a Product
+
+```php
+$siteId = 'your-site-id';
+$productId = 'your-product-id';
+$fields = [
+    'name' => 'New Foo Bar',
+    '_archived' => true
+];
+
+$webflow->updateProduct($siteId, $productId, $fields);
+```
+
+### Create a SKU
+
+```php
+$siteId = 'your-site-id';
+$product 'your-product-id';
+$sku = [
+    'slug' => 'foo-bar-Medium',
+    'name' => 'Foo Bar (M)',
+    'price' => [
+        'value' => 1190,
+        'unit' => 'USD'
+    ]
+];
+$webflow->createSku($siteId, $product, $sku);
+```
+
+### Update a SKU
+
+```php
+$siteId = 'your-site-id';
+$product = 'your-product-id';
+$skuId = 'your-sku-id';
+$sku = [
+    'slug' => 'foo-bar-Medium',
+    'name' => 'Foo Bar (M) Discounted!!',
+    'price' => [
+        'value' => 1290,
+        'unit' => 'USD'
+    ]
+];
+
+$webflow->updateSku($siteId, $productId, $skuId, $sku);
+```
+
+### Inventory for a specific item
+
+```php
+$collectionId = 'your-collection-id'; //likely to be the SKUs collection.
+$skuId = 'your-sku-id';
+
+$webflow->getInventory($collectionId, $skuId)
+```
+
+### Update Inventory
+```php
+$collectionId = 'your-collection-id';
+$skuId = 'your-sku-id';
+$fields = [
+    'inventory_type' => 'infinite'
+];
+
+$webflow->updateInventory($collectionId, $skuId, $fields);
+```
+
+### List orders
+
+```php
+$collectionId = 'your-collection-id';
+$page = 1; // Optional page number
+
+$items = $webflow->listOrders($collectionId, $page);
+```
+
+### Get an Order
+
+```php
+$siteId = 'your-site-id';
+$orderId = 'your-order-id';
+
+$webflow->getOrdr($siteId, $orderId)
+```
+
+### Update an Order
+
+```php
+$siteId = 'your-site-id';
+$orderId = 'your-order-id';
+$fields = [
+    'comment' => 'Adding a comment to this order'
+];
+
+$webflow->updateOrder$siteId, $orderId, $fields);
+```
+
+### Fulfill an Order
+
+```php
+$siteId = 'your-site-id';
+$orderId = 'your-order-id';
+$notifyCustomer = true; // Optional, defaults to false
+
+$webflow->fullfillOrder($siteId, $orderId, $notifyCustomer);
+```
+
+### Un-fulfill an Order
+
+```php
+$siteId = 'your-site-id';
+$orderId = 'your-order-id';
+
+$webflow->unfulfillOrder($siteId, $orderId);
+```
+
+### Refund an Order
+
+```php
+$siteId = 'your-site-id';
+$orderId = 'your-order-id';
+
+$webflow->refundOrder($siteId, $orderId);
+```
+
+### Get Ecommerce settings for a Site
+
+```php
+$siteId = 'your-site-id';
+$webflow->getEcommerceSettings($siteId);
 ```
 
 ## Contributing
