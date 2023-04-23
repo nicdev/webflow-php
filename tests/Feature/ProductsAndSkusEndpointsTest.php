@@ -66,7 +66,7 @@ it('creates a product with a default SKU', function () {
         'Accept' => ['application/json'],
     ]);
 
-    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody()->getContents(), true))->toMatchArray([
         'product' => [
             'name' => 'Foo Bar',
             'slug' => 'foo-bar',
@@ -94,7 +94,6 @@ it('gets a product', function () {
     ]);
 });
 
-
 it('updates a product', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $productFields = [
@@ -111,13 +110,13 @@ it('updates a product', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody()->getContents(), true))->toMatchArray([
         'fields' => [
             'foo' => 'bar',
             'slug' => 'foo-bar',
             'name' => 'Foo Bar',
             'color' => 'red',
-        ]
+        ],
     ]);
 });
 
@@ -137,7 +136,7 @@ it('creates a SKU for a product', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody()->getContents(), true))->toMatchArray([
         'skus' => [
             'fields' => [
                 'foo' => 'bar',
@@ -147,7 +146,7 @@ it('creates a SKU for a product', function () {
                 '_archived' => false,
                 '_draft' => false,
             ],
-        ]
+        ],
     ]);
 });
 
@@ -164,16 +163,16 @@ it('updates a sku', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody()->getContents(), true))->toMatchArray([
         'sku' => [
             'fields' => [
                 'color' => 'green',
             ],
-        ]
+        ],
     ]);
 });
 
-it('Gets invetory for a SKU', function() {
+it('Gets invetory for a SKU', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $data = $this->webflowApiClient->getInventory('foo', 'bar');
     expect($data)->toBeArray();
@@ -185,13 +184,13 @@ it('Gets invetory for a SKU', function() {
     ]);
 });
 
-it('Updates inventory for a SKU', function() {
+it('Updates inventory for a SKU', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $inventoryFields = [
         'inventoryType' => 'finite',
         'quantity' => 10,
     ];
-    $data = $this->webflowApiClient->updateInventory('foo', 'bar', $inventoryFields); 
+    $data = $this->webflowApiClient->updateInventory('foo', 'bar', $inventoryFields);
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('PATCH');
     expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar/inventory');
@@ -199,19 +198,19 @@ it('Updates inventory for a SKU', function() {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody()->getContents(), true))->toMatchArray([
         'fields' => [
             'inventoryType' => 'finite',
             'quantity' => 10,
-        ]
+        ],
     ]);
 });
 
-it('Can\'t update inventory for a SKU using incorrect fields', function() {
+it('Can\'t update inventory for a SKU using incorrect fields', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $inventoryFields = [
         'type' => 'finite',
         'quantity' => 10,
     ];
-    $data = $this->webflowApiClient->updateInventory('foo', 'bar', $inventoryFields); 
+    $data = $this->webflowApiClient->updateInventory('foo', 'bar', $inventoryFields);
 })->throws(Exception::class);
