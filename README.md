@@ -135,6 +135,132 @@ $live = false; // Optional live mode
 $item = $webflow->createItem($collectionId, $fields, $live);
 ```
 
+<<<<<<< Updated upstream
+=======
+### Get an item by its ID
+
+```php
+$collectionId = 'your-collection-id';
+$itemId = 'your-item-id';
+
+$item = $webflow->getItem($collectionId, $itemId)
+```
+
+### Publish one or more items by their ID
+
+```php
+$collectionId = 'your-collection-id';
+$itemIds = ['your-item-id', 'your-other-item-id'];
+    
+$webflow->publishItems($collection, $itemIds);
+```
+
+### Update an item by its ID
+
+```php
+$collectionId = 'your-collection-id';
+$itemId = 'your-item-id';
+$fields = $fields = [
+    'field-name' => 'field-value',
+    // ...
+];
+$live = false; // Optional publish 
+
+$webflow->updateItem($collectionId, $itemId, $fields, $live)
+```
+
+### Patch an item by its ID
+_I don't see a real difference between the update and patch methods but they have been matched to their respective endpoints. For more information see [the documentation](https://developers.webflow.com/reference/update-item)._
+
+```php
+$collectionId = 'your-collection-id';
+$itemId = 'your-item-id';
+$fields = $fields = [
+    'field-name' => 'field-value',
+    // ...
+];
+$live = false; // Optional publish 
+
+$webflow->updateItem($collectionId, $itemId, $fields, $live)
+```
+
+### Delete or un-publish an item by its ID
+
+```php
+$collectionId = 'your-collection-id';
+$itemId = 'your-item-id';
+$live = true; // Optional. When set to true the item will be un-published but kept in the collection
+
+$webflow->deleteItem($collectionId, $itemId, $live)
+```
+
+### List products/SKUs for a specific site by its ID.
+
+
+```php
+$siteId = 'your-site-id';
+$page = 1; // Optional page number
+$webflow->listProducts($siteId, $page);
+```
+
+### Create a Product and SKU
+
+```php
+$siteId = 'your-site-id';
+$product = [
+    'slug' = 'foo-bar',
+    'name' => 'Foo Bar',
+];
+$sku = [
+    'slug' => 'foo-bar-small',
+    'name' => 'Foo Bar (S)',
+    'price' => [
+        'value' => 990,
+        'unit' => 'USD'
+    ]
+]; // Optional
+$webflow->createProductAndSku($siteId, $product, $sku)
+```
+
+### Get Products and SKUs
+
+```php
+$siteId = 'your-site-id';
+$productId = 'your-product-id';
+
+$webflow->getProduct($site, $product);
+```
+
+### Update a Product
+
+```php
+$siteId = 'your-site-id';
+$productId = 'your-product-id';
+$fields = [
+    'name' => 'New Foo Bar',
+    '_archived' => true
+];
+
+$webflow->updateProduct($siteId, $productId, $fields);
+```
+
+### Create a SKU
+
+```php
+$siteId = 'your-site-id';
+$product 'your-product-id';
+$sku = [
+    'slug' => 'foo-bar-Medium',
+    'name' => 'Foo Bar (M)',
+    'price' => [
+        'value' => 1190,
+        'unit' => 'USD'
+    ]
+];
+$webflow->createSku($siteId, $product, $sku);
+```
+
+>>>>>>> Stashed changes
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
