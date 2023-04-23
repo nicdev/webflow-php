@@ -32,3 +32,72 @@ it('lists the items for a collection', function () {
         'Accept' => ['application/json'],
     ]);
 });
+
+it('gets an item', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->getItem('foo', 'bar');
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('GET');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+});
+
+it('creates an item', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $itemFields = [
+        'foo' => 'bar',
+        'slug' => 'foo-bar',
+        'name' => 'Foo Bar',
+    ];
+    $data = $this->webflowApiClient->createItem('foo', $itemFields);
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('POST');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+        'fields' => [
+            'foo' => 'bar',
+            'slug' => 'foo-bar',
+            'name' => 'Foo Bar',
+            '_archived' => false,
+            '_draft' => false,
+        ]
+    ]);
+});
+
+it('creates a published item', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $itemFields = [
+        'foo' => 'bar',
+        'slug' => 'foo-bar',
+        'name' => 'Foo Bar',
+    ];
+    $data = $this->webflowApiClient->createItem('foo', $itemFields, true);
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('POST');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items');
+    expect($this->container[0]['request']->getUri()->getQuery())->toBe('live=true');
+});
+
+it('publishes items', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->publishItems('foo', ['foo', 'bar']);
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('PUT');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/publish');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray(
+        [
+            'itemIds' => ['foo', 'bar']
+        ]
+    );
+});
