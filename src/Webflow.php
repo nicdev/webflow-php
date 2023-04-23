@@ -245,7 +245,7 @@ class Webflow extends HttpClient
     }
 
     /**
-     * Patch and item by its ID.
+     * Patch an item by its ID.
      *
      * @param  string  $collectionId The ID of the collection that the item belongs to.
      * @param  string  $itemId The ID of the item to update.
@@ -261,7 +261,7 @@ class Webflow extends HttpClient
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
         $url = $live ? '/collections/' . $collectionId . '/items/' . $itemId . '?live=true' : '/collections/' . $collectionId . '/items/' . $itemId;
 
-        return $this->put($url, ['fields' => $fields]);
+        return $this->patch($url, ['fields' => $fields]);
     }
 
     /**
