@@ -192,6 +192,75 @@ $itemId = 'your-item-id';
 $live = true; // Optional. When set to true the item will be un-published but kept in the collection
 
 $webflow->deleteItem($collectionId, $itemId, $live)
+<<<<<<< Updated upstream
+=======
+```
+
+### List products/SKUs for a specific site by its ID.
+
+
+```php
+$siteId = 'your-site-id';
+$page = 1; // Optional page number
+$webflow->listProducts($siteId, $page);
+```
+
+### Create a Product and SKU
+
+```php
+$siteId = 'your-site-id';
+$product = [
+    'slug' = 'foo-bar',
+    'name' => 'Foo Bar',
+];
+$sku = [
+    'slug' => 'foo-bar-small',
+    'name' => 'Foo Bar (S)',
+    'price' => [
+        'value' => 990,
+        'unit' => 'USD'
+    ]
+]; // Optional
+$webflow->createProductAndSku($siteId, $product, $sku)
+```
+
+### Get Products and SKUs
+
+```php
+$siteId = 'your-site-id';
+$productId = 'your-product-id';
+
+$webflow->getProduct($site, $product);
+```
+
+### Update a Product
+
+```php
+$siteId = 'your-site-id';
+$productId = 'your-product-id';
+$fields = [
+    'name' => 'New Foo Bar',
+    '_archived' => true
+];
+
+$webflow->updateProduct($siteId, $productId, $fields);
+```
+
+### Create a SKU
+
+```php
+$siteId = 'your-site-id';
+$product 'your-product-id';
+$sku = [
+    'slug' => 'foo-bar-Medium',
+    'name' => 'Foo Bar (M)',
+    'price' => [
+        'value' => 1190,
+        'unit' => 'USD'
+    ]
+];
+$webflow->createSku($siteId, $product, $sku);
+>>>>>>> Stashed changes
 ```
 
 ### List products/SKUs for a specific site by its ID.
