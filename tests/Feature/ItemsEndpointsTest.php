@@ -60,14 +60,14 @@ it('creates an item', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody().'', true))->toMatchArray([
         'fields' => [
             'foo' => 'bar',
             'slug' => 'foo-bar',
             'name' => 'Foo Bar',
             '_archived' => false,
             '_draft' => false,
-        ]
+        ],
     ]);
 });
 
@@ -95,9 +95,9 @@ it('publishes items', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray(
+    expect(json_decode($this->container[0]['request']->getBody().'', true))->toMatchArray(
         [
-            'itemIds' => ['foo', 'bar']
+            'itemIds' => ['foo', 'bar'],
         ]
     );
 });
@@ -117,12 +117,12 @@ it('updates an item', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody().'', true))->toMatchArray([
         'fields' => [
             'foo' => 'bar',
             'slug' => 'foo-bar',
             'name' => 'Foo Bar',
-        ]
+        ],
     ]);
 });
 
@@ -154,19 +154,19 @@ it('patches an item', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    
-    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+
+    expect(json_decode($this->container[0]['request']->getBody().'', true))->toMatchArray([
         'fields' => [
             'foo' => 'bar',
             'slug' => 'foo-bar',
             'name' => 'Foo Bar',
             '_draft' => false,
-            '_archived' => false
-        ]
+            '_archived' => false,
+        ],
     ]);
 });
 
-it('deletes an item', function() {
+it('deletes an item', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $data = $this->webflowApiClient->deleteItem('foo', 'bar');
     expect($data)->toBeArray();
@@ -178,7 +178,7 @@ it('deletes an item', function() {
     ]);
 });
 
-it('unpublishes an item', function() {
+it('unpublishes an item', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $data = $this->webflowApiClient->deleteItem('foo', 'bar', true);
     expect($data)->toBeArray();

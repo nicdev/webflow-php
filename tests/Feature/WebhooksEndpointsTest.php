@@ -55,13 +55,12 @@ it('creates a webhook', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody().'', true))->toMatchArray([
         'filter' => ['foo' => 'bar'],
         'triggerType' => 'form_submission',
         'url' => 'http://foo.com',
     ]);
 });
-
 
 it('creates requires a valid trigger type to create a webhook', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
