@@ -140,7 +140,7 @@ class Webflow extends HttpClient
         if (!in_array($triggerType, WebhookTypes::toArray())) {
             throw new Exception('Invalid trigger type provided');
         }
-        $this->post('/sites/' . $siteId . '/webhooks', [...$filter, 'triggerType' => $triggerType, 'url' => $url]);
+        return $this->post('/sites/' . $siteId . '/webhooks', ['filter' => $filter, 'triggerType' => $triggerType, 'url' => $url]);
     }
 
     /**

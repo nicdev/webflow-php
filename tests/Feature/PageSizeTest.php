@@ -9,8 +9,6 @@ use GuzzleHttp\Psr7\Response;
 use Nicdev\WebflowSdk\HttpClient;
 use Nicdev\WebflowSdk\Webflow;
 
-// use Mockery;
-
 // use Illuminate\Support\HttpClient;
 beforeEach(function () {
     $this->webflow = new Webflow('foo');
@@ -19,13 +17,13 @@ beforeEach(function () {
     $this->pageSizeProperty->setAccessible(true);
 });
 
-it('sets the pages size', function () { 
+it('sets the pages size and returns itself', function () { 
     
     expect($this->pageSizeProperty->getValue($this->webflow))->toBe(100);
 
     $newSize = rand(1, 100);
-    $this->webflow->setPageSize($newSize);
-    
+
+    expect($this->webflow->setPageSize($newSize))->toBeInstanceOf(Webflow::class);
     expect($this->pageSizeProperty->getValue($this->webflow))->toBe($newSize);
 });
 
