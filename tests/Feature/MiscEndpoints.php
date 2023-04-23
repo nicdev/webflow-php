@@ -21,48 +21,24 @@ beforeEach(function () {
     $this->webflowApiClient = new Webflow(token: 'foo', client: $client);
 });
 
-it('lists sites', function () {
+it('gets current user', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->listSites();
+    $data = $this->webflowApiClient->user();
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('GET');
-    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/user');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
 });
 
-it('gets a site', function () {
+it('gets the current user\'s authorization info', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->getSite('foo');
+    $data = $this->webflowApiClient->authInfo();
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('GET');
-    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo');
-    expect($this->container[0]['request']->getHeaders())->toMatchArray([
-        'Authorization' => ['Bearer foo'],
-        'Accept' => ['application/json'],
-    ]);
-});
-
-it('publishes a site', function () {
-    $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->publishSite('foo');
-    expect($data)->toBeArray();
-    expect($this->container[0]['request']->getMethod())->toBe('POST');
-    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/publish');
-    expect($this->container[0]['request']->getHeaders())->toMatchArray([
-        'Authorization' => ['Bearer foo'],
-        'Accept' => ['application/json'],
-    ]);
-});
-
-it('gets site\'s domains', function () {
-    $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->listDomains('foo');
-    expect($data)->toBeArray();
-    expect($this->container[0]['request']->getMethod())->toBe('GET');
-    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/domains');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/info');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
