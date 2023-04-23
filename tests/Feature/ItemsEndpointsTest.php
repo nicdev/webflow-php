@@ -101,3 +101,67 @@ it('publishes items', function () {
         ]
     );
 });
+
+it('updates an item', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $itemFields = [
+        'foo' => 'bar',
+        'slug' => 'foo-bar',
+        'name' => 'Foo Bar',
+    ];
+    $data = $this->webflowApiClient->updateItem('foo', 'bar', $itemFields);
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('PUT');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+        'fields' => [
+            'foo' => 'bar',
+            'slug' => 'foo-bar',
+            'name' => 'Foo Bar',
+        ]
+    ]);
+});
+
+it('publishes an item through the update method', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->updateItem('foo', 'bar', [], true);
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('PUT');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    expect($this->container[0]['request']->getUri()->getQuery())->toBe('live=true');
+});
+
+it('patches an item', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $itemFields = [
+        'foo' => 'bar',
+        'slug' => 'foo-bar',
+        'name' => 'Foo Bar',
+    ];
+    $data = $this->webflowApiClient->patchItem('foo', 'bar', $itemFields);
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('PATCH');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    
+    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+        'fields' => [
+            'foo' => 'bar',
+            'slug' => 'foo-bar',
+            'name' => 'Foo Bar',
+            '_draft' => false,
+            '_archived' => false
+        ]
+    ]);
+});
