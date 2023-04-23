@@ -165,3 +165,28 @@ it('patches an item', function () {
         ]
     ]);
 });
+
+it('deletes an item', function() {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->deleteItem('foo', 'bar');
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('DELETE');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+});
+
+it('unpublishes an item', function() {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->deleteItem('foo', 'bar', true);
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('DELETE');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    expect($this->container[0]['request']->getUri()->getQuery())->toBe('live=true');
+});
