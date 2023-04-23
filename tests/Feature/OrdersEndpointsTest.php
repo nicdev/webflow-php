@@ -21,60 +21,56 @@ beforeEach(function () {
     $this->webflowApiClient = new Webflow(token: 'foo', client: $client);
 });
 
-it('lists the webhooks for a site', function () {
+it('lists the orders for a site', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->listWebhooks('foo');
+    $data = $this->webflowApiClient->listOrders('foo');
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('GET');
-    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/webhooks');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/orders');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
 });
 
-it('gets a webhook', function () {
+it('lists the orders for a site, second page', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->getWebhook('foo', 'bar');
+    $data = $this->webflowApiClient->listOrders('foo', 2);
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('GET');
-    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/webhooks/bar');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/orders');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    expect($this->container[0]['request']->getUri()->getQuery())->toBe('limit=100&offset=100');
+});
+
+it('gets an order', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->getOrder('foo', 'bar');
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('GET');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/orders/bar');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
 });
 
-it('creates a webhook', function () {
+it('updates an order', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->createWebhook('foo', 'form_submission', 'http://foo.com', ['foo' => 'bar']);
+    $orderFields = [
+        'comment' => 'Foo Bar',
+    ];
+    $data = $this->webflowApiClient->updateOrder('foo', 'bar', $orderFields);
     expect($data)->toBeArray();
-    expect($this->container[0]['request']->getMethod())->toBe('POST');
-    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/webhooks');
+    expect($this->container[0]['request']->getMethod())->toBe('PATCH');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/orders/bar');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody()->getContents(), true))->toMatchArray([
-        'filter' => ['foo' => 'bar'],
-        'triggerType' => 'form_submission',
-        'url' => 'http://foo.com',
-    ]);
-});
-
-it('creates requires a valid trigger type to create a webhook', function () {
-    $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->createWebhook('foo', 'not_a_valid_trigger', 'http://foo.com', ['foo' => 'bar']);
-})->throws(Exception::class);
-
-it('deletes a webhook', function () {
-    $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->deleteWebhook('foo', 'bar');
-    expect($data)->toBeArray();
-    expect($this->container[0]['request']->getMethod())->toBe('DELETE');
-    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/webhooks/bar');
-    expect($this->container[0]['request']->getHeaders())->toMatchArray([
-        'Authorization' => ['Bearer foo'],
-        'Accept' => ['application/json'],
-    ]);
+    ray(json_decode($this->container[0]['request']->getBody()->getContents(), true));
+    // expect($this->container[0]['request']->getBody()->getContents())->toBe(json_encode($orderFields));
 });

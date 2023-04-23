@@ -60,7 +60,7 @@ it('creates an item', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody().'', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody()->getContents(), true))->toMatchArray([
         'fields' => [
             'foo' => 'bar',
             'slug' => 'foo-bar',
@@ -95,7 +95,7 @@ it('publishes items', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody().'', true))->toMatchArray(
+    expect(json_decode($this->container[0]['request']->getBody()->getContents(), true))->toMatchArray(
         [
             'itemIds' => ['foo', 'bar'],
         ]
@@ -117,7 +117,7 @@ it('updates an item', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    expect(json_decode($this->container[0]['request']->getBody().'', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody()->getContents(), true))->toMatchArray([
         'fields' => [
             'foo' => 'bar',
             'slug' => 'foo-bar',
@@ -155,7 +155,7 @@ it('patches an item', function () {
         'Accept' => ['application/json'],
     ]);
 
-    expect(json_decode($this->container[0]['request']->getBody().'', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody()->getContents(), true))->toMatchArray([
         'fields' => [
             'foo' => 'bar',
             'slug' => 'foo-bar',
