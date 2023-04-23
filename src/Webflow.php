@@ -14,9 +14,8 @@ use Nicdev\WebflowSdk\Enums\WebhookTypes;
  */
 class Webflow extends HttpClient
 {
-
     protected int $pageSize = 100;
-    
+
     /**
      * Webflow constructor.
      *
@@ -33,8 +32,12 @@ class Webflow extends HttpClient
      */
     public function setPageSize(int $pageSize): Webflow
     {
-        $this->pageSize = $pageSize;
+        if ($pageSize > 100 || $pageSize < 1) {
+            throw new Exception('Page size must be between 1 and 100');
+        }
         
+        $this->pageSize = $pageSize;
+
         return $this;
     }
 
@@ -76,7 +79,7 @@ class Webflow extends HttpClient
      */
     public function getSite(string $siteId): array
     {
-        return $this->get('/sites/'.$siteId);
+        return $this->get('/sites/' . $siteId);
     }
 
     /**
@@ -87,7 +90,7 @@ class Webflow extends HttpClient
      */
     public function publishSite(string $siteId): array
     {
-        return $this->post('/sites/'.$siteId.'/publish');
+        return $this->post('/sites/' . $siteId . '/publish');
     }
 
     /**
@@ -98,7 +101,7 @@ class Webflow extends HttpClient
      */
     public function listDomains(string $siteId): array
     {
-        return $this->get('/sites/'.$siteId.'/domains');
+        return $this->get('/sites/' . $siteId . '/domains');
     }
 
     /**
@@ -109,7 +112,7 @@ class Webflow extends HttpClient
      */
     public function listWebhooks(string $siteId): array
     {
-        return $this->get('/sites/'.$siteId.'/webhooks');
+        return $this->get('/sites/' . $siteId . '/webhooks');
     }
 
     /**
@@ -121,7 +124,7 @@ class Webflow extends HttpClient
      */
     public function getWebhook(string $siteId, string $webhookId): array
     {
-        return $this->get('/sites/'.$siteId.'/webhooks/'.$webhookId);
+        return $this->get('/sites/' . $siteId . '/webhooks/' . $webhookId);
     }
 
     /**
@@ -134,10 +137,10 @@ class Webflow extends HttpClient
      */
     public function createWebhook(string $siteId, string $triggerType, string $url, array $filter = []): array
     {
-        if (! in_array($triggerType, WebhookTypes::toArray())) {
+        if (!in_array($triggerType, WebhookTypes::toArray())) {
             throw new Exception('Invalid trigger type provided');
         }
-        $this->post('/sites/'.$siteId.'/webhooks', [...$filter, 'triggerType' => $triggerType, 'url' => $url]);
+        $this->post('/sites/' . $siteId . '/webhooks', [...$filter, 'triggerType' => $triggerType, 'url' => $url]);
     }
 
     /**
@@ -148,7 +151,7 @@ class Webflow extends HttpClient
      */
     public function deleteWebhook(string $siteId, string $webhookId): array
     {
-        return $this->delete('/sites/'.$siteId.'/webhooks/'.$webhookId);
+        return $this->delete('/sites/' . $siteId . '/webhooks/' . $webhookId);
     }
 
     /**
@@ -159,7 +162,7 @@ class Webflow extends HttpClient
      */
     public function listCollections(string $siteId): array
     {
-        return $this->get('/sites/'.$siteId.'/collections');
+        return $this->get('/sites/' . $siteId . '/collections');
     }
 
     /**
@@ -170,7 +173,7 @@ class Webflow extends HttpClient
      */
     public function getCollection(string $collectionId): array
     {
-        return $this->get('/collections/'.$collectionId);
+        return $this->get('/collections/' . $collectionId);
     }
 
     /**
@@ -184,7 +187,7 @@ class Webflow extends HttpClient
     {
         $offset = ($page - 1) * $this->pageSize;
 
-        return $this->get('/collections/'.$collectionId.'/items', ['limit' => $this->pageSize, 'offset' => $offset]);
+        return $this->get('/collections/' . $collectionId . '/items', ['limit' => $this->pageSize, 'offset' => $offset]);
     }
 
     /**
@@ -195,7 +198,7 @@ class Webflow extends HttpClient
      */
     public function getItem(string $collectionId, string $itemId): array
     {
-        return $this->get('/collections/'.$collectionId.'/items/'.$itemId);
+        return $this->get('/collections/' . $collectionId . '/items/' . $itemId);
     }
 
     /**
@@ -210,7 +213,7 @@ class Webflow extends HttpClient
     {
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
-        $url = $live ? '/collections/'.$collectionId.'/items?live=true' : '/collections/'.$collectionId.'/items';
+        $url = $live ? '/collections/' . $collectionId . '/items?live=true' : '/collections/' . $collectionId . '/items';
 
         return $this->post($url, ['fields' => $fields]);
     }
@@ -223,7 +226,7 @@ class Webflow extends HttpClient
      */
     public function publishItems(string $collectionId, array $itemIds): array
     {
-        return $this->put('/collections/'.$collectionId.'/items/publish', ['itemIds' => $itemIds]);
+        return $this->put('/collections/' . $collectionId . '/items/publish', ['itemIds' => $itemIds]);
     }
 
     /**
@@ -236,7 +239,7 @@ class Webflow extends HttpClient
      */
     public function updateItem(string $collectionId, string $itemId, array $fields, $live = false): array
     {
-        $url = $live ? '/collections/'.$collectionId.'/items/'.$itemId.'?live=true' : '/collections/'.$collectionId.'/items/'.$itemId;
+        $url = $live ? '/collections/' . $collectionId . '/items/' . $itemId . '?live=true' : '/collections/' . $collectionId . '/items/' . $itemId;
 
         return $this->put($url, ['fields' => $fields]);
     }
@@ -256,7 +259,7 @@ class Webflow extends HttpClient
     {
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
-        $url = $live ? '/collections/'.$collectionId.'/items/'.$itemId.'?live=true' : '/collections/'.$collectionId.'/items/'.$itemId;
+        $url = $live ? '/collections/' . $collectionId . '/items/' . $itemId . '?live=true' : '/collections/' . $collectionId . '/items/' . $itemId;
 
         return $this->put($url, ['fields' => $fields]);
     }
@@ -270,7 +273,7 @@ class Webflow extends HttpClient
      */
     public function deleteItem(string $collectionId, string $itemId, $live = false): array
     {
-        $url = $live ? '/collections/'.$collectionId.'/items/'.$itemId.'?live=true' : '/collections/'.$collectionId.'/items/'.$itemId;
+        $url = $live ? '/collections/' . $collectionId . '/items/' . $itemId . '?live=true' : '/collections/' . $collectionId . '/items/' . $itemId;
 
         return $this->delete($url);
     }
@@ -286,7 +289,7 @@ class Webflow extends HttpClient
     {
         $offset = ($page - 1) * $this->pageSize;
 
-        return $this->get('/sites/'.$siteId.'/products', ['limit' => $this->pageSize, 'offset' => $offset]);
+        return $this->get('/sites/' . $siteId . '/products', ['limit' => $this->pageSize, 'offset' => $offset]);
     }
 
     /** Adding a new Product involves creating both a Product Item and a SKU Item, 
@@ -299,8 +302,8 @@ class Webflow extends HttpClient
     {
         $product['_draft'] = isset($product['_draft']) ? $product['_draft'] : false;
         $sku['_archived'] = isset($sku['_archived']) ? $sku['_archived'] : false;
-        
-        return $this->post('/sites/'.$siteId.'/products', ['product' => ['fields' => $product], ['sku' => ['fields' => $sku]]]);
+
+        return $this->post('/sites/' . $siteId . '/products', ['product' => ['fields' => $product], ['sku' => ['fields' => $sku]]]);
     }
 
     /**
@@ -311,7 +314,7 @@ class Webflow extends HttpClient
      */
     public function getProduct(string $siteId, string $productId): array
     {
-        return $this->get('/sites/'.$siteId.'/products/'.$productId);
+        return $this->get('/sites/' . $siteId . '/products/' . $productId);
     }
 
     /**
@@ -323,7 +326,7 @@ class Webflow extends HttpClient
      */
     public function updateProduct(string $siteId, string $productId, array $fields): array
     {
-        return $this->patch('/sites/'.$siteId.'/products/'.$productId, ['fields' => $fields]);
+        return $this->patch('/sites/' . $siteId . '/products/' . $productId, ['fields' => $fields]);
     }
 
     /** 
@@ -337,8 +340,8 @@ class Webflow extends HttpClient
     {
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
-        
-        return $this->post('/sites/'.$siteId.'/products/'.$productId.'/skus', ['sku' => ['fields' => $fields]]);
+
+        return $this->post('/sites/' . $siteId . '/products/' . $productId . '/skus', ['sku' => ['fields' => $fields]]);
     }
 
     /**
@@ -351,7 +354,7 @@ class Webflow extends HttpClient
      */
     public function updateSku(string $siteId, string $productId, string $skuId, array $fields): array
     {
-        return $this->patch('/sites/'.$siteId.'/products/'.$productId.'/skus/'.$skuId, ['sku' => ['fields' => $fields]]);
+        return $this->patch('/sites/' . $siteId . '/products/' . $productId . '/skus/' . $skuId, ['sku' => ['fields' => $fields]]);
     }
 
     /**
@@ -362,7 +365,7 @@ class Webflow extends HttpClient
      */
     public function getInventory(string $collectionId, string $skuId): array
     {
-        return $this->get('/collections/'.$collectionId.'/items/'.$skuId.'/inventory');
+        return $this->get('/collections/' . $collectionId . '/items/' . $skuId . '/inventory');
     }
 
     /**
@@ -379,11 +382,11 @@ class Webflow extends HttpClient
     {
         array_map(function ($fieldName) {
             if (!in_array($fieldName, InventoryQuantityFields::toArray())) {
-                throw new \Exception('Only the fields ' . implode(', ', InventoryQuantityFields::toArray()) .' are allowed to be updated.');
+                throw new \Exception('Only the fields ' . implode(', ', InventoryQuantityFields::toArray()) . ' are allowed to be updated.');
             }
         }, array_keys($fields));
-        
-        return $this->patch('/collections/'.$collectionId.'/items/'.$skuId.'/inventory', ['fields' => $fields]);
+
+        return $this->patch('/collections/' . $collectionId . '/items/' . $skuId . '/inventory', ['fields' => $fields]);
     }
 
     /**
@@ -397,7 +400,7 @@ class Webflow extends HttpClient
     {
         $offset = ($page - 1) * $this->pageSize;
 
-        return $this->get('/sites/'.$siteId.'/orders', ['limit' => $this->pageSize, 'offset' => $offset]);
+        return $this->get('/sites/' . $siteId . '/orders', ['limit' => $this->pageSize, 'offset' => $offset]);
     }
 
     /**
@@ -409,7 +412,7 @@ class Webflow extends HttpClient
      */
     public function getOrder(string $siteId, string $orderId): array
     {
-        return $this->get('/sites/'.$siteId.'/orders/'.$orderId);
+        return $this->get('/sites/' . $siteId . '/orders/' . $orderId);
     }
 
     /**
@@ -422,12 +425,12 @@ class Webflow extends HttpClient
     public function updateOrder(string $siteId, string $orderId, array $fields): array
     {
         array_map(function ($fieldName) {
-                    if (!in_array($fieldName, OrderUpdateFields::toArray())) {
-                        throw new \Exception('Only the fields ' . implode(', ', OrderUpdateFields::toArray()) .' are allowed to be updated.');
-                    }
-                }, array_keys($fields));
-            
-        return $this->patch('/sites/'.$siteId.'/orders/'.$orderId, ['fields' => $fields]);
+            if (!in_array($fieldName, OrderUpdateFields::toArray())) {
+                throw new \Exception('Only the fields ' . implode(', ', OrderUpdateFields::toArray()) . ' are allowed to be updated.');
+            }
+        }, array_keys($fields));
+
+        return $this->patch('/sites/' . $siteId . '/orders/' . $orderId, ['fields' => $fields]);
     }
 
     /**
@@ -439,7 +442,7 @@ class Webflow extends HttpClient
      */
     public function fulfillOrder(string $siteId, string $orderId, bool $notifyCustomer = false): array
     {
-        return $this->post('/sites/'.$siteId.'/orders/'.$orderId.'/fulfill', ['sendOrderFulfilledEmail' => $notifyCustomer]);
+        return $this->post('/sites/' . $siteId . '/orders/' . $orderId . '/fulfill', ['sendOrderFulfilledEmail' => $notifyCustomer]);
     }
 
     /**
@@ -450,7 +453,7 @@ class Webflow extends HttpClient
      */
     public function unfulfillOrder(string $siteId, string $orderId): array
     {
-        return $this->post('/sites/'.$siteId.'/orders/'.$orderId.'/unfulfill');
+        return $this->post('/sites/' . $siteId . '/orders/' . $orderId . '/unfulfill');
     }
 
     /**
@@ -462,7 +465,7 @@ class Webflow extends HttpClient
      */
     public function refundOrder(string $siteId, string $orderId): array
     {
-        return $this->post('/sites/'.$siteId.'/orders/'.$orderId.'/refund');
+        return $this->post('/sites/' . $siteId . '/orders/' . $orderId . '/refund');
     }
 
     /**
@@ -470,6 +473,6 @@ class Webflow extends HttpClient
      */
     public function getEcommerceSettings(string $siteId): array
     {
-        return $this->get('/sites/'.$siteId.'/ecommerce/settings');
+        return $this->get('/sites/' . $siteId . '/ecommerce/settings');
     }
 }
