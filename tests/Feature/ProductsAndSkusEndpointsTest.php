@@ -1,5 +1,6 @@
 <?php
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -65,7 +66,7 @@ it('creates a product with a default SKU', function () {
         'Accept' => ['application/json'],
     ]);
 
-    expect(json_decode($this->container[0]['request']->getBody().'', true))->toMatchArray([
+    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
         'product' => [
             'name' => 'Foo Bar',
             'slug' => 'foo-bar',
@@ -81,134 +82,136 @@ it('creates a product with a default SKU', function () {
     ]);
 });
 
-// it('gets an item', function () {
-//     $this->mockHandler->append(new Response(200, [], json_encode([])));
-//     $data = $this->webflowApiClient->getItem('foo', 'bar');
-//     expect($data)->toBeArray();
-//     expect($this->container[0]['request']->getMethod())->toBe('GET');
-//     expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
-//     expect($this->container[0]['request']->getHeaders())->toMatchArray([
-//         'Authorization' => ['Bearer foo'],
-//         'Accept' => ['application/json'],
-//     ]);
-// });
+it('gets a product', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->getProduct('foo', 'bar');
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('GET');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/products/bar');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+});
 
-// it('creates a published item', function () {
-//     $this->mockHandler->append(new Response(200, [], json_encode([])));
-//     $itemFields = [
-//         'foo' => 'bar',
-//         'slug' => 'foo-bar',
-//         'name' => 'Foo Bar',
-//     ];
-//     $data = $this->webflowApiClient->createItem('foo', $itemFields, true);
-//     expect($data)->toBeArray();
-//     expect($this->container[0]['request']->getMethod())->toBe('POST');
-//     expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items');
-//     expect($this->container[0]['request']->getUri()->getQuery())->toBe('live=true');
-// });
 
-// it('publishes items', function () {
-//     $this->mockHandler->append(new Response(200, [], json_encode([])));
-//     $data = $this->webflowApiClient->publishItems('foo', ['foo', 'bar']);
-//     expect($data)->toBeArray();
-//     expect($this->container[0]['request']->getMethod())->toBe('PUT');
-//     expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/publish');
-//     expect($this->container[0]['request']->getHeaders())->toMatchArray([
-//         'Authorization' => ['Bearer foo'],
-//         'Accept' => ['application/json'],
-//     ]);
-//     expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray(
-//         [
-//             'itemIds' => ['foo', 'bar']
-//         ]
-//     );
-// });
+it('updates a product', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $productFields = [
+        'foo' => 'bar',
+        'slug' => 'foo-bar',
+        'name' => 'Foo Bar',
+        'color' => 'red',
+    ];
+    $data = $this->webflowApiClient->updateProduct('foo', 'bar', $productFields);
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('PATCH');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/products/bar');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+        'fields' => [
+            'foo' => 'bar',
+            'slug' => 'foo-bar',
+            'name' => 'Foo Bar',
+            'color' => 'red',
+        ]
+    ]);
+});
 
-// it('updates an item', function () {
-//     $this->mockHandler->append(new Response(200, [], json_encode([])));
-//     $itemFields = [
-//         'foo' => 'bar',
-//         'slug' => 'foo-bar',
-//         'name' => 'Foo Bar',
-//     ];
-//     $data = $this->webflowApiClient->updateItem('foo', 'bar', $itemFields);
-//     expect($data)->toBeArray();
-//     expect($this->container[0]['request']->getMethod())->toBe('PUT');
-//     expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
-//     expect($this->container[0]['request']->getHeaders())->toMatchArray([
-//         'Authorization' => ['Bearer foo'],
-//         'Accept' => ['application/json'],
-//     ]);
-//     expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
-//         'fields' => [
-//             'foo' => 'bar',
-//             'slug' => 'foo-bar',
-//             'name' => 'Foo Bar',
-//         ]
-//     ]);
-// });
+it('creates a SKU for a product', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $skuFields = [
+        'foo' => 'bar',
+        'slug' => 'foo-bar',
+        'name' => 'Foo Bar',
+        'size' => 'small',
+    ];
+    $data = $this->webflowApiClient->createSku('foo', 'bar', $skuFields);
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('POST');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/products/bar/skus');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+        'skus' => [
+            'fields' => [
+                'foo' => 'bar',
+                'slug' => 'foo-bar',
+                'name' => 'Foo Bar',
+                'size' => 'small',
+                '_archived' => false,
+                '_draft' => false,
+            ],
+        ]
+    ]);
+});
 
-// it('publishes an item through the update method', function () {
-//     $this->mockHandler->append(new Response(200, [], json_encode([])));
-//     $data = $this->webflowApiClient->updateItem('foo', 'bar', [], true);
-//     expect($data)->toBeArray();
-//     expect($this->container[0]['request']->getMethod())->toBe('PUT');
-//     expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
-//     expect($this->container[0]['request']->getHeaders())->toMatchArray([
-//         'Authorization' => ['Bearer foo'],
-//         'Accept' => ['application/json'],
-//     ]);
-//     expect($this->container[0]['request']->getUri()->getQuery())->toBe('live=true');
-// });
+it('updates a sku', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $skuFields = [
+        'color' => 'green',
+    ];
+    $data = $this->webflowApiClient->updateSku('foo', 'bar', 'baz', $skuFields);
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('PATCH');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/products/bar/skus/baz');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+        'sku' => [
+            'fields' => [
+                'color' => 'green',
+            ],
+        ]
+    ]);
+});
 
-// it('patches an item', function () {
-//     $this->mockHandler->append(new Response(200, [], json_encode([])));
-//     $itemFields = [
-//         'foo' => 'bar',
-//         'slug' => 'foo-bar',
-//         'name' => 'Foo Bar',
-//     ];
-//     $data = $this->webflowApiClient->patchItem('foo', 'bar', $itemFields);
-//     expect($data)->toBeArray();
-//     expect($this->container[0]['request']->getMethod())->toBe('PATCH');
-//     expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
-//     expect($this->container[0]['request']->getHeaders())->toMatchArray([
-//         'Authorization' => ['Bearer foo'],
-//         'Accept' => ['application/json'],
-//     ]);
+it('Gets invetory for a SKU', function() {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->getInventory('foo', 'bar');
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('GET');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar/inventory');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+});
 
-//     expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
-//         'fields' => [
-//             'foo' => 'bar',
-//             'slug' => 'foo-bar',
-//             'name' => 'Foo Bar',
-//             '_draft' => false,
-//             '_archived' => false
-//         ]
-//     ]);
-// });
+it('Updates inventory for a SKU', function() {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $inventoryFields = [
+        'inventoryType' => 'finite',
+        'quantity' => 10,
+    ];
+    $data = $this->webflowApiClient->updateInventory('foo', 'bar', $inventoryFields); 
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('PATCH');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar/inventory');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+        'fields' => [
+            'inventoryType' => 'finite',
+            'quantity' => 10,
+        ]
+    ]);
+});
 
-// it('deletes an item', function() {
-//     $this->mockHandler->append(new Response(200, [], json_encode([])));
-//     $data = $this->webflowApiClient->deleteItem('foo', 'bar');
-//     expect($data)->toBeArray();
-//     expect($this->container[0]['request']->getMethod())->toBe('DELETE');
-//     expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
-//     expect($this->container[0]['request']->getHeaders())->toMatchArray([
-//         'Authorization' => ['Bearer foo'],
-//         'Accept' => ['application/json'],
-//     ]);
-// });
-
-// it('unpublishes an item', function() {
-//     $this->mockHandler->append(new Response(200, [], json_encode([])));
-//     $data = $this->webflowApiClient->deleteItem('foo', 'bar', true);
-//     expect($data)->toBeArray();
-//     expect($this->container[0]['request']->getMethod())->toBe('DELETE');
-//     expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items/bar');
-//     expect($this->container[0]['request']->getHeaders())->toMatchArray([
-//         'Authorization' => ['Bearer foo'],
-//         'Accept' => ['application/json'],
-//     ]);
-//     expect($this->container[0]['request']->getUri()->getQuery())->toBe('live=true');
-// });
+it('Can\'t update inventory for a SKU using incorrect fields', function() {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $inventoryFields = [
+        'type' => 'finite',
+        'quantity' => 10,
+    ];
+    $data = $this->webflowApiClient->updateInventory('foo', 'bar', $inventoryFields); 
+})->throws(Exception::class);

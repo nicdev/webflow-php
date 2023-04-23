@@ -351,7 +351,7 @@ class Webflow extends HttpClient
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
 
-        return $this->post('/sites/'.$siteId.'/products/'.$productId.'/skus', ['sku' => ['fields' => $fields]]);
+        return $this->post('/sites/'.$siteId.'/products/'.$productId.'/skus', ['skus' => ['fields' => $fields]]);
     }
 
     /**
