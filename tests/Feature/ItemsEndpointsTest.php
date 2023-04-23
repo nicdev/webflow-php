@@ -26,7 +26,7 @@ it('lists the items for a collection', function () {
     $data = $this->webflowApiClient->listItems('foo');
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('GET');
-    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/collections');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/collections/foo/items');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
