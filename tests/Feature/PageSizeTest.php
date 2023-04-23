@@ -1,12 +1,6 @@
 <?php
 
 use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Response;
-use Nicdev\WebflowSdk\HttpClient;
 use Nicdev\WebflowSdk\Webflow;
 
 // use Illuminate\Support\HttpClient;
@@ -17,8 +11,8 @@ beforeEach(function () {
     $this->pageSizeProperty->setAccessible(true);
 });
 
-it('sets the pages size and returns itself', function () { 
-    
+it('sets the pages size and returns itself', function () {
+
     expect($this->pageSizeProperty->getValue($this->webflow))->toBe(100);
 
     $newSize = rand(1, 100);
@@ -38,4 +32,3 @@ it('can\'t set the page size to 0', function () {
 it('can\'t set the page size to over 100', function () {
     $this->webflow->setPageSize(101);
 })->throws(Exception::class);
-

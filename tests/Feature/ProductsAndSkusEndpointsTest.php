@@ -64,8 +64,8 @@ it('creates a product with a default SKU', function () {
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-    
-    expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
+
+    expect(json_decode($this->container[0]['request']->getBody().'', true))->toMatchArray([
         'product' => [
             'name' => 'Foo Bar',
             'slug' => 'foo-bar',
@@ -92,8 +92,6 @@ it('creates a product with a default SKU', function () {
 //         'Accept' => ['application/json'],
 //     ]);
 // });
-
-
 
 // it('creates a published item', function () {
 //     $this->mockHandler->append(new Response(200, [], json_encode([])));
@@ -178,7 +176,7 @@ it('creates a product with a default SKU', function () {
 //         'Authorization' => ['Bearer foo'],
 //         'Accept' => ['application/json'],
 //     ]);
-    
+
 //     expect(json_decode($this->container[0]['request']->getBody() . '', true))->toMatchArray([
 //         'fields' => [
 //             'foo' => 'bar',

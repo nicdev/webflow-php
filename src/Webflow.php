@@ -79,7 +79,7 @@ class Webflow extends HttpClient
      */
     public function getSite(string $siteId): array
     {
-        return $this->get('/sites/' . $siteId);
+        return $this->get('/sites/'.$siteId);
     }
 
     /**
@@ -90,7 +90,7 @@ class Webflow extends HttpClient
      */
     public function publishSite(string $siteId): array
     {
-        return $this->post('/sites/' . $siteId . '/publish');
+        return $this->post('/sites/'.$siteId.'/publish');
     }
 
     /**
@@ -101,7 +101,7 @@ class Webflow extends HttpClient
      */
     public function listDomains(string $siteId): array
     {
-        return $this->get('/sites/' . $siteId . '/domains');
+        return $this->get('/sites/'.$siteId.'/domains');
     }
 
     /**
@@ -112,7 +112,7 @@ class Webflow extends HttpClient
      */
     public function listWebhooks(string $siteId): array
     {
-        return $this->get('/sites/' . $siteId . '/webhooks');
+        return $this->get('/sites/'.$siteId.'/webhooks');
     }
 
     /**
@@ -124,7 +124,7 @@ class Webflow extends HttpClient
      */
     public function getWebhook(string $siteId, string $webhookId): array
     {
-        return $this->get('/sites/' . $siteId . '/webhooks/' . $webhookId);
+        return $this->get('/sites/'.$siteId.'/webhooks/'.$webhookId);
     }
 
     /**
@@ -137,10 +137,11 @@ class Webflow extends HttpClient
      */
     public function createWebhook(string $siteId, string $triggerType, string $url, array $filter = []): array
     {
-        if (!in_array($triggerType, WebhookTypes::toArray())) {
+        if (! in_array($triggerType, WebhookTypes::toArray())) {
             throw new Exception('Invalid trigger type provided');
         }
-        return $this->post('/sites/' . $siteId . '/webhooks', ['filter' => $filter, 'triggerType' => $triggerType, 'url' => $url]);
+
+        return $this->post('/sites/'.$siteId.'/webhooks', ['filter' => $filter, 'triggerType' => $triggerType, 'url' => $url]);
     }
 
     /**
@@ -151,7 +152,7 @@ class Webflow extends HttpClient
      */
     public function deleteWebhook(string $siteId, string $webhookId): array
     {
-        return $this->delete('/sites/' . $siteId . '/webhooks/' . $webhookId);
+        return $this->delete('/sites/'.$siteId.'/webhooks/'.$webhookId);
     }
 
     /**
@@ -162,7 +163,7 @@ class Webflow extends HttpClient
      */
     public function listCollections(string $siteId): array
     {
-        return $this->get('/sites/' . $siteId . '/collections');
+        return $this->get('/sites/'.$siteId.'/collections');
     }
 
     /**
@@ -173,7 +174,7 @@ class Webflow extends HttpClient
      */
     public function getCollection(string $collectionId): array
     {
-        return $this->get('/collections/' . $collectionId);
+        return $this->get('/collections/'.$collectionId);
     }
 
     /**
@@ -187,7 +188,7 @@ class Webflow extends HttpClient
     {
         $offset = ($page - 1) * $this->pageSize;
 
-        return $this->get('/collections/' . $collectionId . '/items', ['limit' => $this->pageSize, 'offset' => $offset]);
+        return $this->get('/collections/'.$collectionId.'/items', ['limit' => $this->pageSize, 'offset' => $offset]);
     }
 
     /**
@@ -198,7 +199,7 @@ class Webflow extends HttpClient
      */
     public function getItem(string $collectionId, string $itemId): array
     {
-        return $this->get('/collections/' . $collectionId . '/items/' . $itemId);
+        return $this->get('/collections/'.$collectionId.'/items/'.$itemId);
     }
 
     /**
@@ -213,7 +214,7 @@ class Webflow extends HttpClient
     {
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
-        $url = $live ? '/collections/' . $collectionId . '/items?live=true' : '/collections/' . $collectionId . '/items';
+        $url = $live ? '/collections/'.$collectionId.'/items?live=true' : '/collections/'.$collectionId.'/items';
 
         return $this->post($url, ['fields' => $fields]);
     }
@@ -226,7 +227,7 @@ class Webflow extends HttpClient
      */
     public function publishItems(string $collectionId, array $itemIds): array
     {
-        return $this->put('/collections/' . $collectionId . '/items/publish', ['itemIds' => $itemIds]);
+        return $this->put('/collections/'.$collectionId.'/items/publish', ['itemIds' => $itemIds]);
     }
 
     /**
@@ -239,7 +240,7 @@ class Webflow extends HttpClient
      */
     public function updateItem(string $collectionId, string $itemId, array $fields, $live = false): array
     {
-        $url = $live ? '/collections/' . $collectionId . '/items/' . $itemId . '?live=true' : '/collections/' . $collectionId . '/items/' . $itemId;
+        $url = $live ? '/collections/'.$collectionId.'/items/'.$itemId.'?live=true' : '/collections/'.$collectionId.'/items/'.$itemId;
 
         return $this->put($url, ['fields' => $fields]);
     }
@@ -259,7 +260,7 @@ class Webflow extends HttpClient
     {
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
-        $url = $live ? '/collections/' . $collectionId . '/items/' . $itemId . '?live=true' : '/collections/' . $collectionId . '/items/' . $itemId;
+        $url = $live ? '/collections/'.$collectionId.'/items/'.$itemId.'?live=true' : '/collections/'.$collectionId.'/items/'.$itemId;
 
         return $this->patch($url, ['fields' => $fields]);
     }
@@ -273,7 +274,7 @@ class Webflow extends HttpClient
      */
     public function deleteItem(string $collectionId, string $itemId, $live = false): array
     {
-        $url = $live ? '/collections/' . $collectionId . '/items/' . $itemId . '?live=true' : '/collections/' . $collectionId . '/items/' . $itemId;
+        $url = $live ? '/collections/'.$collectionId.'/items/'.$itemId.'?live=true' : '/collections/'.$collectionId.'/items/'.$itemId;
 
         return $this->delete($url);
     }
@@ -289,11 +290,12 @@ class Webflow extends HttpClient
     {
         $offset = ($page - 1) * $this->pageSize;
 
-        return $this->get('/sites/' . $siteId . '/products', ['limit' => $this->pageSize, 'offset' => $offset]);
+        return $this->get('/sites/'.$siteId.'/products', ['limit' => $this->pageSize, 'offset' => $offset]);
     }
 
-    /** Adding a new Product involves creating both a Product Item and a SKU Item, 
+    /** Adding a new Product involves creating both a Product Item and a SKU Item,
      * since a Product Item has to have, at minimum, a SKU Item.
+     *
      * @param  string  $siteId The ID of the site.
      * @param  array  $product An array of fields to create the product with.
      * @param  array  $sku An array of fields to create the sku with.
@@ -310,35 +312,36 @@ class Webflow extends HttpClient
         $payload = $sku ?
             ['product' => $product, 'sku' => $sku] :
             ['product' => $product];
-        return $this->post('/sites/' . $siteId . '/products', $payload);
+
+        return $this->post('/sites/'.$siteId.'/products', $payload);
     }
 
     /**
      * Get a specific product by its ID.
-     * 
+     *
      * @param  string  $siteId The ID of the site.
      * @param  string  $productId The ID of the product to fetch.
      */
     public function getProduct(string $siteId, string $productId): array
     {
-        return $this->get('/sites/' . $siteId . '/products/' . $productId);
+        return $this->get('/sites/'.$siteId.'/products/'.$productId);
     }
 
     /**
      * Update a specific product by its ID.
-     * 
+     *
      * @param  string  $siteId The ID of the site.
      * @param  string  $productId The ID of the product to update.
      * @param  array  $product An array of fields to update the product with.
      */
     public function updateProduct(string $siteId, string $productId, array $fields): array
     {
-        return $this->patch('/sites/' . $siteId . '/products/' . $productId, ['fields' => $fields]);
+        return $this->patch('/sites/'.$siteId.'/products/'.$productId, ['fields' => $fields]);
     }
 
-    /** 
+    /**
      * Create a SKU for a product
-     * 
+     *
      * @param  string  $siteId The ID of the site.
      * @param  string  $productId The ID of the product to create the SKU for.
      * @param  array  $sku An array of fields to create the sku with.
@@ -348,39 +351,39 @@ class Webflow extends HttpClient
         $fields['_draft'] = isset($fields['_draft']) ? $fields['_draft'] : false;
         $fields['_archived'] = isset($fields['_archived']) ? $fields['_archived'] : false;
 
-        return $this->post('/sites/' . $siteId . '/products/' . $productId . '/skus', ['sku' => ['fields' => $fields]]);
+        return $this->post('/sites/'.$siteId.'/products/'.$productId.'/skus', ['sku' => ['fields' => $fields]]);
     }
 
     /**
      * Update a SKU for a product by its ID.
-     * 
+     *
      * @param  string  $siteId The ID of the site.
      * @param  string  $productId The ID of the product to update the SKU for.
      * @param  string  $skuId The ID of the SKU to update.
-     * @param  array  $sku An array of fields to update the sku with.    
+     * @param  array  $sku An array of fields to update the sku with.
      */
     public function updateSku(string $siteId, string $productId, string $skuId, array $fields): array
     {
-        return $this->patch('/sites/' . $siteId . '/products/' . $productId . '/skus/' . $skuId, ['sku' => ['fields' => $fields]]);
+        return $this->patch('/sites/'.$siteId.'/products/'.$productId.'/skus/'.$skuId, ['sku' => ['fields' => $fields]]);
     }
 
     /**
      * Inventory for a specific item by its ID.
-     * 
+     *
      * @param  string  $collectionId The ID of the collection that the item belongs to (likely to be the SKUs collection.)
      * @param  string  $skuId The ID of the sku item to fetch the inventory for.
      */
     public function getInventory(string $collectionId, string $skuId): array
     {
-        return $this->get('/collections/' . $collectionId . '/items/' . $skuId . '/inventory');
+        return $this->get('/collections/'.$collectionId.'/items/'.$skuId.'/inventory');
     }
 
     /**
      * Update inventory for a specific item by its ID.
-     * 
+     *
      * @param  string  $collectionId The ID of the collection that the item belongs to (likely to be the SKUs collection.)
      * @param  string  $skuId The ID of the sku item to update the inventory for.
-     * @param  array  $inventory An array of fields to update the inventory with 
+     * @param  array  $inventory An array of fields to update the inventory with
      * * inventoryType: infinite/finite
      * * updateQuantity: integer // Adds this quantity to currently store quantity. Can be negative.
      * * quantity: integer // Sets the quantity to this number. Takes precendence over updateQuantity.
@@ -388,17 +391,17 @@ class Webflow extends HttpClient
     public function updateInventory(string $collectionId, string $skuId, array $fields): array
     {
         array_map(function ($fieldName) {
-            if (!in_array($fieldName, InventoryQuantityFields::toArray())) {
-                throw new \Exception('Only the fields ' . implode(', ', InventoryQuantityFields::toArray()) . ' are allowed to be updated.');
+            if (! in_array($fieldName, InventoryQuantityFields::toArray())) {
+                throw new \Exception('Only the fields '.implode(', ', InventoryQuantityFields::toArray()).' are allowed to be updated.');
             }
         }, array_keys($fields));
 
-        return $this->patch('/collections/' . $collectionId . '/items/' . $skuId . '/inventory', ['fields' => $fields]);
+        return $this->patch('/collections/'.$collectionId.'/items/'.$skuId.'/inventory', ['fields' => $fields]);
     }
 
     /**
      * Get orders for a specific site by its ID.
-     * 
+     *
      * @param  string  $siteId The ID of the site.
      * @param  int  $page The page number of items to retrieve
      * @return array The response from the API.
@@ -407,24 +410,24 @@ class Webflow extends HttpClient
     {
         $offset = ($page - 1) * $this->pageSize;
 
-        return $this->get('/sites/' . $siteId . '/orders', ['limit' => $this->pageSize, 'offset' => $offset]);
+        return $this->get('/sites/'.$siteId.'/orders', ['limit' => $this->pageSize, 'offset' => $offset]);
     }
 
     /**
      * Get a specific order by its ID.
-     * 
+     *
      * @param  string  $siteId The ID of the site.
      * @param  string  $orderId The ID of the order to fetch.
      * @return array The response from the API.
      */
     public function getOrder(string $siteId, string $orderId): array
     {
-        return $this->get('/sites/' . $siteId . '/orders/' . $orderId);
+        return $this->get('/sites/'.$siteId.'/orders/'.$orderId);
     }
 
     /**
      * Update a specific order by its ID.
-     * 
+     *
      * @param  string  $siteId The ID of the site.
      * @param  string  $orderId The ID of the order to update.
      * @param  array  $fields An array of fields to update the order with.
@@ -432,47 +435,47 @@ class Webflow extends HttpClient
     public function updateOrder(string $siteId, string $orderId, array $fields): array
     {
         array_map(function ($fieldName) {
-            if (!in_array($fieldName, OrderUpdateFields::toArray())) {
-                throw new \Exception('Only the fields ' . implode(', ', OrderUpdateFields::toArray()) . ' are allowed to be updated.');
+            if (! in_array($fieldName, OrderUpdateFields::toArray())) {
+                throw new \Exception('Only the fields '.implode(', ', OrderUpdateFields::toArray()).' are allowed to be updated.');
             }
         }, array_keys($fields));
 
-        return $this->patch('/sites/' . $siteId . '/orders/' . $orderId, ['fields' => $fields]);
+        return $this->patch('/sites/'.$siteId.'/orders/'.$orderId, ['fields' => $fields]);
     }
 
     /**
      * Fulfill and order by its ID.
-     * 
+     *
      * @param  string  $siteId The ID of the site.
      * @param  string  $orderId The ID of the order to fulfill.
-     * @param bool $notifyCustomer Whether or not to notify the customer of the fulfillment.
+     * @param  bool  $notifyCustomer Whether or not to notify the customer of the fulfillment.
      */
     public function fulfillOrder(string $siteId, string $orderId, bool $notifyCustomer = false): array
     {
-        return $this->post('/sites/' . $siteId . '/orders/' . $orderId . '/fulfill', ['sendOrderFulfilledEmail' => $notifyCustomer]);
+        return $this->post('/sites/'.$siteId.'/orders/'.$orderId.'/fulfill', ['sendOrderFulfilledEmail' => $notifyCustomer]);
     }
 
     /**
      * Unfulfill an order by its ID.
-     * 
+     *
      * @param  string  $siteId The ID of the site.
      * @param  string  $orderId The ID of the order to unfulfill.
      */
     public function unfulfillOrder(string $siteId, string $orderId): array
     {
-        return $this->post('/sites/' . $siteId . '/orders/' . $orderId . '/unfulfill');
+        return $this->post('/sites/'.$siteId.'/orders/'.$orderId.'/unfulfill');
     }
 
     /**
      * Refund an order by its ID. Reverses a Stripe charge and refunds an order back to a
      * customer. It will also set the order's status to refunded.
-     * 
+     *
      * @param  string  $siteId The ID of the site.
      * @param  string  $orderId The ID of the order to refund.
      */
     public function refundOrder(string $siteId, string $orderId): array
     {
-        return $this->post('/sites/' . $siteId . '/orders/' . $orderId . '/refund');
+        return $this->post('/sites/'.$siteId.'/orders/'.$orderId.'/refund');
     }
 
     /**
@@ -480,6 +483,6 @@ class Webflow extends HttpClient
      */
     public function getEcommerceSettings(string $siteId): array
     {
-        return $this->get('/sites/' . $siteId . '/ecommerce/settings');
+        return $this->get('/sites/'.$siteId.'/ecommerce/settings');
     }
 }
