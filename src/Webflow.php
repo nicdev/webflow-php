@@ -35,7 +35,7 @@ class Webflow extends HttpClient
         if ($pageSize > 100 || $pageSize < 1) {
             throw new Exception('Page size must be between 1 and 100');
         }
-        
+
         $this->pageSize = $pageSize;
 
         return $this;
@@ -298,12 +298,19 @@ class Webflow extends HttpClient
      * @param  array  $product An array of fields to create the product with.
      * @param  array  $sku An array of fields to create the sku with.
      */
-    public function createProductAndSku(string $siteId, array $product, array $sku): array
+    public function createProductAndSku(string $siteId, array $product, array $sku = null): array
     {
         $product['_draft'] = isset($product['_draft']) ? $product['_draft'] : false;
-        $sku['_archived'] = isset($sku['_archived']) ? $sku['_archived'] : false;
+        $product['_archived'] = isset($product['_archived']) ? $product['_archived'] : false;
+        if ($sku) {
+            $sku['_draft'] = isset($sku['_draft']) ? $sku['_draft'] : false;
+            $sku['_archived'] = isset($sku['_archived']) ? $sku['_archived'] : false;
+        }
 
-        return $this->post('/sites/' . $siteId . '/products', ['product' => ['fields' => $product], ['sku' => ['fields' => $sku]]]);
+        $payload = $sku ?
+            ['product' => $product, 'sku' => $sku] :
+            ['product' => $product];
+        return $this->post('/sites/' . $siteId . '/products', $payload);
     }
 
     /**
