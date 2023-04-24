@@ -2,7 +2,6 @@
 
 namespace Nicdev\WebflowSdk;
 
-use Exception;
 use Nicdev\WebflowSdk\Entities\Site;
 use Nicdev\WebflowSdk\Enums\InventoryQuantityFields;
 use Nicdev\WebflowSdk\Enums\OrderUpdateFields;
@@ -35,7 +34,7 @@ class Webflow extends HttpClient
     public function setPageSize(int $pageSize): Webflow
     {
         if ($pageSize > 100 || $pageSize < 1) {
-            throw new Exception('Page size must be between 1 and 100');
+            throw new \Exception('Page size must be between 1 and 100');
         }
 
         $this->pageSize = $pageSize;
@@ -151,7 +150,7 @@ class Webflow extends HttpClient
     public function createWebhook(string $siteId, string $triggerType, string $url, array $filter = []): array
     {
         if (! in_array($triggerType, WebhookTypes::toArray())) {
-            throw new Exception('Invalid trigger type provided');
+            throw new \Exception('Invalid trigger type provided');
         }
 
         return $this->post('/sites/'.$siteId.'/webhooks', ['filter' => $filter, 'triggerType' => $triggerType, 'url' => $url]);
