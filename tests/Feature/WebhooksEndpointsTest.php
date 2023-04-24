@@ -65,7 +65,7 @@ it('creates a webhook', function () {
 it('creates requires a valid trigger type to create a webhook', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $data = $this->webflowApiClient->createWebhook('foo', 'not_a_valid_trigger', 'http://foo.com', ['foo' => 'bar']);
-})->throws(Exception::class);
+})->throws(\Exception::class);
 
 it('deletes a webhook', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));

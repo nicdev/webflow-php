@@ -1,6 +1,5 @@
 <?php
 
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -213,4 +212,4 @@ it('Can\'t update inventory for a SKU using incorrect fields', function () {
         'quantity' => 10,
     ];
     $data = $this->webflowApiClient->updateInventory('foo', 'bar', $inventoryFields);
-})->throws(Exception::class);
+})->throws(\Exception::class);

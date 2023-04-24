@@ -1,6 +1,5 @@
 <?php
 
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -85,7 +84,7 @@ it('it can\'t update an invalid field for an order', function () {
         'not-valid-field' => 'Foo Bar',
     ];
     $this->webflowApiClient->updateOrder('foo', 'bar', $orderFields);
-})->throws(Exception::class);
+})->throws(\Exception::class);
 
 it('fulfills an order', function () {
     $this->mockHandler->append(

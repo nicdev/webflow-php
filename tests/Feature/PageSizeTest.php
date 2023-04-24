@@ -1,6 +1,5 @@
 <?php
 
-use Exception;
 use Nicdev\WebflowSdk\Webflow;
 
 // use Illuminate\Support\HttpClient;
@@ -23,12 +22,12 @@ it('sets the pages size and returns itself', function () {
 
 it('can\'t set the page size to a negative number', function () {
     $this->webflow->setPageSize(-1);
-})->throws(Exception::class);
+})->throws(\Exception::class);
 
 it('can\'t set the page size to 0', function () {
     $this->webflow->setPageSize(0);
-})->throws(Exception::class);
+})->throws(\Exception::class);
 
 it('can\'t set the page size to over 100', function () {
     $this->webflow->setPageSize(101);
-})->throws(Exception::class);
+})->throws(\Exception::class);
