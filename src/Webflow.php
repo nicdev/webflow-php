@@ -3,9 +3,11 @@
 namespace Nicdev\WebflowSdk;
 
 use Exception;
+use Nicdev\WebflowSdk\Entities\Site;
 use Nicdev\WebflowSdk\Enums\InventoryQuantityFields;
 use Nicdev\WebflowSdk\Enums\OrderUpdateFields;
 use Nicdev\WebflowSdk\Enums\WebhookTypes;
+use Nicdev\WebflowSdk\HttpClient;
 
 /**
  * Class Webflow
@@ -80,6 +82,17 @@ class Webflow extends HttpClient
     public function getSite(string $siteId): array
     {
         return $this->get('/sites/'.$siteId);
+    }
+
+    /**
+     * Fetch a specific site by its ID and return a site object
+     *
+     * @param  string  $siteId The ID of the site to fetch.
+     * @return Site An initialized site object. 
+     */
+    public function site(string $siteId): Site
+    {
+        return new Site($this, $siteId);
     }
 
     /**
