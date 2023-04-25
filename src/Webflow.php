@@ -6,6 +6,7 @@ use Nicdev\WebflowSdk\Entities\Site;
 use Nicdev\WebflowSdk\Enums\InventoryQuantityFields;
 use Nicdev\WebflowSdk\Enums\OrderUpdateFields;
 use Nicdev\WebflowSdk\Enums\WebhookTypes;
+use Nicdev\WebflowSdk\WebflowSites;
 
 /**
  * Class Webflow
@@ -71,50 +72,20 @@ class Webflow extends HttpClient
         return $this->get('/info');
     }
 
+    public function sites(): WebflowSites
+    {
+        return new WebflowSites($this);
+    }
+
     /**
      * List all sites associated with the authenticated user.
      *
      * @return array The response from the API.
      */
-    public function listSites(): array
-    {
-        return $this->get('/sites');
-    }
-
-    /**
-     * Fetch a specific site by its ID.
-     *
-     * @param  string  $siteId The ID of the site to fetch.
-     * @return array The response from the API.
-     */
-    public function getSite(string $siteId): array
-    {
-        return $this->get('/sites/'.$siteId);
-    }
-
-    /**
-     * Fetch a specific site by its ID and return a site object
-     *
-     * @param  string  $siteId The ID of the site to fetch.
-     * @return Site An initialized site object.
-     */
-    public function site(string $siteId): Site
-    {
-        $this->site = new Site($this, $siteId);
-        
-        return $this->site;
-    }
-
-    /**
-     * Publish a specific site by its ID.
-     *
-     * @param  string  $siteId The ID of the site to publish.
-     * @return array The response from the API.
-     */
-    public function publishSite(string $siteId): array
-    {
-        return $this->post('/sites/'.$siteId.'/publish');
-    }
+    // public function listSites(): array
+    // {
+    //     return $this->get('/sites');
+    // }
 
     /**
      * List all domains associated with a specific site by its ID.
@@ -122,10 +93,10 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to list domains for.
      * @return array The response from the API.
      */
-    public function listDomains(string $siteId): array
-    {
-        return $this->get('/sites/'.$siteId.'/domains');
-    }
+    // public function listDomains(string $siteId): array
+    // {
+    //     return $this->get('/sites/'.$siteId.'/domains');
+    // }
 
     /**
      * List all webhooks associated with a specific site by its ID.
@@ -133,10 +104,10 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to list webhooks for.
      * @return array The response from the API.
      */
-    public function listWebhooks(string $siteId): array
-    {
-        return $this->get('/sites/'.$siteId.'/webhooks');
-    }
+    // public function listWebhooks(string $siteId): array
+    // {
+    //     return $this->get('/sites/'.$siteId.'/webhooks');
+    // }
 
     /**
      * Fetch a specific webhook associated with a specific site by their IDs.
@@ -184,10 +155,10 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to list collections for.
      * @return array The response from the API.
      */
-    public function listCollections(string $siteId): array
-    {
-        return $this->get('/sites/'.$siteId.'/collections');
-    }
+    // public function listCollections(string $siteId): array
+    // {
+    //     return $this->get('/sites/'.$siteId.'/collections');
+    // }
 
     /**
      * Fetch a specific collection by its ID.
