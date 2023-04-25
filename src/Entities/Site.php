@@ -2,57 +2,61 @@
 
 namespace Nicdev\WebflowSdk\Entities;
 
+use DateTime;
+use DateTimeZone;
 use Nicdev\WebflowSdk\Webflow;
 
  class Site
  {
-    private $webflow;
-
-    private $data;
-
-    public function __construct(Webflow $webflow = null, $siteId)
+    protected array $domains;
+    protected array $webhooks;
+    protected array $collections;
+    
+    public function __construct(
+        private Webflow $webflow, 
+        readonly string $_id,
+        readonly DateTime $createdOn,
+        readonly string $name,
+        readonly string $shortName,
+        readonly DateTimeZone $timezone,
+        readonly string $database)
     {
-        $this->webflow = $webflow ?? new Webflow('');
-
-        $this->data = $this->webflow->getSite($siteId);
+        
     }
 
-    public function __get($property)
+    public function __get($name)
     {
-        return match ($property) {
-            'domains' => $this->domains(),
-            'webhooks' => $this->webhooks(),
-            'collections' => $this->collections(),
-            default => $this->data[$property] ?? null,
+        return match($name) {
+            'domains' => isset($this->domains) ? $this->domains : $this->domains(),
+            'webhooks' => isset($this->webhooks) ? $this->webhooks : $this->webhooks(),
+            'collections' => isset($this->collections) ? $this->collections : $this->collections(),
+            default => throw new \Exception("Property {$name} does not exist on " . $this::class)
         };
     }
 
-    public function publish()
+    public function publish(): array
     {
-        $this->webflow->publishSite($this->data['_id']);
-        $this->data = [$this->webflow->getSite($this->data['_id']), ...$this->data];
-
-        return $this;
+        return $this->webflow->post('/sites/'.$this->_id.'/publish');
     }
 
     public function domains()
     {
-        $this->data['domains'] = $this->webflow->listDomains($this->data['_id']);
+        $this->domains = $this->webflow->get('/sites/'.$this->_id.'/domains');
 
-        return $this->data['domains'];
+        return $this->domains;
     }
 
     public function webhooks()
     {
-        $this->data['webhooks'] = $this->webflow->listWebhooks($this->data['_id']);
+        $this->webhooks = $this->webflow->get('/sites/'.$this->_id.'/webhooks');
 
-        return $this->data['webhooks'];
+        return $this->webhooks;
     }
 
     public function collections()
     {
-        $this->data['collections'] = $this->webflow->listCollections($this->data['_id']);
+        $this->collections = $this->webflow->get('/sites/'.$this->_id.'/collections');
 
-        return $this->data['collections'];
+        return $this->collections;
     }
  }
