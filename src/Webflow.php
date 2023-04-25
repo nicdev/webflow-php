@@ -6,7 +6,6 @@ use Nicdev\WebflowSdk\Entities\Site;
 use Nicdev\WebflowSdk\Enums\InventoryQuantityFields;
 use Nicdev\WebflowSdk\Enums\OrderUpdateFields;
 use Nicdev\WebflowSdk\Enums\WebhookTypes;
-use Nicdev\WebflowSdk\HttpClient;
 
 /**
  * Class Webflow
@@ -17,6 +16,8 @@ class Webflow extends HttpClient
 {
     protected int $pageSize = 100;
 
+    private $site; 
+
     /**
      * Webflow constructor.
      *
@@ -26,6 +27,14 @@ class Webflow extends HttpClient
     public function __construct(private $token, private $client = null)
     {
         parent::__construct($token, $client);
+    }
+
+    public function __get($property): mixed
+    {
+        return match ($property) {
+            'site' => $this->site,
+            default => throw new \Exception('Invalid property'),
+        };
     }
 
     /**
@@ -87,11 +96,13 @@ class Webflow extends HttpClient
      * Fetch a specific site by its ID and return a site object
      *
      * @param  string  $siteId The ID of the site to fetch.
-     * @return Site An initialized site object. 
+     * @return Site An initialized site object.
      */
     public function site(string $siteId): Site
     {
-        return new Site($this, $siteId);
+        $this->site = new Site($this, $siteId);
+        
+        return $this->site;
     }
 
     /**
