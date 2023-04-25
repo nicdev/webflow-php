@@ -90,7 +90,7 @@ it('fulfills an order', function () {
     $this->mockHandler->append(
         new Response(200, [], json_encode([])),
     );
-    
+
     $data = $this->webflowApiClient->fulfillOrder('foo', 'bar', true);
     expect($this->container[0]['request']->getMethod())->toBe('POST');
     expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/orders/bar/fulfill');
