@@ -30,14 +30,6 @@ class Webflow extends HttpClient
         parent::__construct($token, $client);
     }
 
-    public function __get($property): mixed
-    {
-        return match ($property) {
-            'site' => $this->site,
-            default => throw new \Exception('Invalid property'),
-        };
-    }
-
     /**
      * Set page size for paginated requests.
      */
@@ -116,10 +108,10 @@ class Webflow extends HttpClient
      * @param  string  $webhookId The ID of the webhook to fetch.
      * @return array The response from the API.
      */
-    public function getWebhook(string $siteId, string $webhookId): array
-    {
-        return $this->get('/sites/'.$siteId.'/webhooks/'.$webhookId);
-    }
+    // public function getWebhook(string $siteId, string $webhookId): array
+    // {
+    //     return $this->get('/sites/'.$siteId.'/webhooks/'.$webhookId);
+    // }
 
     /**
      * Create a webhook for a specific site.
@@ -144,10 +136,10 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to delete the webhook from.
      * @param  string  $webhookId The ID of the webhook to delete.
      */
-    public function deleteWebhook(string $siteId, string $webhookId): array
-    {
-        return $this->delete('/sites/'.$siteId.'/webhooks/'.$webhookId);
-    }
+    // public function deleteWebhook(string $siteId, string $webhookId): array
+    // {
+    //     return $this->delete('/sites/'.$siteId.'/webhooks/'.$webhookId);
+    // }
 
     /**
      * List all collections for a specific site.
