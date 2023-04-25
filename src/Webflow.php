@@ -6,7 +6,6 @@ use Nicdev\WebflowSdk\Entities\Site;
 use Nicdev\WebflowSdk\Enums\InventoryQuantityFields;
 use Nicdev\WebflowSdk\Enums\OrderUpdateFields;
 use Nicdev\WebflowSdk\Enums\WebhookTypes;
-use Nicdev\WebflowSdk\WebflowSites;
 
 /**
  * Class Webflow
@@ -17,7 +16,7 @@ class Webflow extends HttpClient
 {
     protected int $pageSize = 100;
 
-    private $site; 
+    private $site;
 
     /**
      * Webflow constructor.
