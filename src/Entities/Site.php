@@ -16,7 +16,7 @@ class Site
 
     public function __construct(
         private Webflow $webflow,
-        readonly string $_id,
+        protected string $_id,
         readonly DateTime $createdOn,
         readonly string $name,
         readonly string $shortName,
@@ -68,8 +68,23 @@ class Site
         return $this->webhooks;
     }
 
-    public function webhook(string $webhookId): Webhook
+    public function webhook(string|array $webhookData): Webhook
     {
+        if(is_string($webhookData)) {
+            $webhookId = $webhookData;
+        } else if (isset($webhookData['_id'])) {
+            $webhookId = $webhookData['_id'];
+        } else {
+            return new Webhook(
+                webflow: $this->webflow,
+                triggerType: isset($webhookData['triggerType']) ? $webhookData['triggerType'] : '',
+                site: $this->_id,
+                url: isset($webhookData['url']) ? $webhookData['url'] : '',
+                createdOn: isset($webhookData['createdOn']) ? new DateTime($webhookData['createdOn']) : new DateTime(),
+                filter: isset($webhookData['filter']) ? $webhookData['filter'] : [],
+            );
+        }
+
         $webhookData = $this->webflow->get('/sites/'.$this->_id.'/webhooks/'.$webhookId);
 
         return new Webhook(
