@@ -1,5 +1,7 @@
 # Webflow PHP SDK
 
+**This is open source software and not in any official way supported by Webflow.**
+
 This PHP SDK allows you to interact with the Webflow API easily. The Webflow class provides methods to manage sites, domains, webhooks, and collections.
 
 ## BEWARE! This is a super early version in active development. So please be careful if you decide to use it ✌️
