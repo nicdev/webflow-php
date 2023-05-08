@@ -33,9 +33,11 @@ class Site
         };
     }
 
-    public function publish(): array
+    public function publish(): Site
     {
-        return $this->webflow->post('/sites/'.$this->_id.'/publish');
+        $this->webflow->post('/sites/'.$this->_id.'/publish');
+
+        return $this;
     }
 
     public function domains()
