@@ -9,7 +9,7 @@ class Webhook
 {
     public function __construct(
         private Webflow $webflow,
-        protected string $_id,
+        readonly string $_id,
         readonly string $triggerType,
         readonly string $triggerId,
         readonly string $site,

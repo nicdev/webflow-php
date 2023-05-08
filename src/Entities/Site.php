@@ -12,10 +12,6 @@ class Site
 {
     protected array $domains;
 
-    protected WebflowWebhooks $webhooks;
-
-    protected WebflowCollections $collections;
-
     public function __construct(
         private Webflow $webflow,
         readonly string $_id,
@@ -25,8 +21,6 @@ class Site
         readonly DateTimeZone $timezone,
         readonly string|null $database = null
     ) {
-        $this->collections = new WebflowCollections($this->webflow, $this->_id);
-        $this->webhooks = new WebflowWebhooks($this->webflow, $this->_id);
     }
 
     public function __get($name)
@@ -53,15 +47,30 @@ class Site
 
     public function webhooks($webhookId = null)
     {
-        return $webhookId ? [$this->webhooks->get($webhookId)] : $this->webhooks->list();
+        $webhooks = $webhookId ? [$this->webflow->getWebhook($this->_id, $webhookId)] : $this->webflow->listWebhooks($this->_id);
+
+        return array_map(function ($webhook) {
+            return new Webhook(
+                $this->webflow,
+                _id: $webhook['_id'],
+                triggerId: $webhook['triggerType'],
+                triggerType: $webhook['triggerId'],
+                site: $webhook['site'],
+                createdOn: new DateTime(
+                    $webhook['createdOn']
+                ),
+                lastUsed: isset($webhook['lastUsedOn']) ? new DateTime(
+                    $webhook['lastUsedOn']
+                ) : null,
+                filter: isset($webhook['filter']) ? $webhook['filter'] : [],
+            );
+        }, $webhooks);
     }
 
     public function collections($collectionId = null)
     {
-        if ($collectionId) {
-            return $this->collections->get($collectionId);
-        }
-
+        $collections = $collectionId ? [$this->webflow->getCollection($collectionId)] : $this->webflow->listCollections($this->_id);
+        
         return array_map(function ($collection) {
             return new Collection(
                 $this->webflow,
@@ -72,8 +81,6 @@ class Site
                 $collection['slug'],
                 $collection['singularName']
             );
-        }, $this->collections->list($this->_id));
-
-        return $this->collections;
+        }, $collections);
     }
 }
