@@ -73,21 +73,43 @@ class Webflow extends HttpClient
      *
      * @return array The response from the API.
      */
-    // public function listSites(): array
-    // {
-    //     return $this->get('/sites');
-    // }
+    public function listSites(): array
+    {
+        return $this->get('/sites');
+    }
 
     /**
+     * Fetch a specific site by its ID.
+     *
+     * @param  string  $siteId The ID of the site to fetch.
+     * @return array The response from the API.
+     */
+    public function getSite(string $siteId): array
+    {
+        return $this->get('/sites/'.$siteId);
+    }
+    
+    /**
+     * Publish a specific site by its ID.
+     *
+     * @param  string  $siteId The ID of the site to publish.
+     * @return array The response from the API.
+     */
+    public function publishSite(string $siteId): array
+    {
+        return $this->post('/sites/'.$siteId.'/publish');
+    }
+
+     /**
      * List all domains associated with a specific site by its ID.
      *
      * @param  string  $siteId The ID of the site to list domains for.
      * @return array The response from the API.
      */
-    // public function listDomains(string $siteId): array
-    // {
-    //     return $this->get('/sites/'.$siteId.'/domains');
-    // }
+    public function listDomains(string $siteId): array
+    {
+        return $this->get('/sites/'.$siteId.'/domains');
+    }
 
     /**
      * List all webhooks associated with a specific site by its ID.
@@ -95,10 +117,11 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to list webhooks for.
      * @return array The response from the API.
      */
-    // public function listWebhooks(string $siteId): array
-    // {
-    //     return $this->get('/sites/'.$siteId.'/webhooks');
-    // }
+    public function listWebhooks(string $siteId): array
+    {
+        return $this->get('/sites/'.$siteId.'/webhooks');
+    }
+    
 
     /**
      * Fetch a specific webhook associated with a specific site by their IDs.
@@ -107,10 +130,10 @@ class Webflow extends HttpClient
      * @param  string  $webhookId The ID of the webhook to fetch.
      * @return array The response from the API.
      */
-    // public function getWebhook(string $siteId, string $webhookId): array
-    // {
-    //     return $this->get('/sites/'.$siteId.'/webhooks/'.$webhookId);
-    // }
+    public function getWebhook(string $siteId, string $webhookId): array
+    {
+        return $this->get('/sites/'.$siteId.'/webhooks/'.$webhookId);
+    }
 
     /**
      * Create a webhook for a specific site.
@@ -135,21 +158,21 @@ class Webflow extends HttpClient
      * @param  string  $siteId The ID of the site to delete the webhook from.
      * @param  string  $webhookId The ID of the webhook to delete.
      */
-    // public function deleteWebhook(string $siteId, string $webhookId): array
-    // {
-    //     return $this->delete('/sites/'.$siteId.'/webhooks/'.$webhookId);
-    // }
+    public function deleteWebhook(string $siteId, string $webhookId): array
+    {
+        return $this->delete('/sites/'.$siteId.'/webhooks/'.$webhookId);
+    }
 
-    /**
+       /**
      * List all collections for a specific site.
      *
      * @param  string  $siteId The ID of the site to list collections for.
      * @return array The response from the API.
      */
-    // public function listCollections(string $siteId): array
-    // {
-    //     return $this->get('/sites/'.$siteId.'/collections');
-    // }
+    public function listCollections(string $siteId): array
+    {
+        return $this->get('/sites/'.$siteId.'/collections');
+    }
 
     /**
      * Fetch a specific collection by its ID.
