@@ -3,7 +3,6 @@
 namespace Nicdev\WebflowSdk\Entities;
 
 use DateTime;
-use DateTimeZone;
 use Nicdev\WebflowSdk\Webflow;
 
 class Webhook
@@ -20,4 +19,3 @@ class Webhook
     ) {
     }
 }
-

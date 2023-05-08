@@ -70,9 +70,9 @@ class Site
 
     public function webhook(string|array $webhookData): Webhook
     {
-        if(is_string($webhookData)) {
+        if (is_string($webhookData)) {
             $webhookId = $webhookData;
-        } else if (isset($webhookData['_id'])) {
+        } elseif (isset($webhookData['_id'])) {
             $webhookId = $webhookData['_id'];
         } else {
             return new Webhook(

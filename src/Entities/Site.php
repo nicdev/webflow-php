@@ -35,18 +35,18 @@ class Site
             'domains' => isset($this->domains) ? $this->domains : $this->domains(),
             'webhooks' => isset($this->webhooks) ? $this->webhooks : $this->webhooks(),
             'collections' => isset($this->collections) ? $this->collections : $this->collections(),
-            default => throw new \Exception("Property {$name} does not exist on " . $this::class)
+            default => throw new \Exception("Property {$name} does not exist on ".$this::class)
         };
     }
 
     public function publish(): array
     {
-        return $this->webflow->post('/sites/' . $this->_id . '/publish');
+        return $this->webflow->post('/sites/'.$this->_id.'/publish');
     }
 
     public function domains()
     {
-        $this->domains = $this->webflow->get('/sites/' . $this->_id . '/domains');
+        $this->domains = $this->webflow->get('/sites/'.$this->_id.'/domains');
 
         return $this->domains;
     }
@@ -61,6 +61,7 @@ class Site
         if ($collectionId) {
             return $this->collections->get($collectionId);
         }
+
         return array_map(function ($collection) {
             return new Collection(
                 $this->webflow,
