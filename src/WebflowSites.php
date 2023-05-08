@@ -14,7 +14,17 @@ class WebflowSites
 
     public function list(): array
     {
-        return $this->webflow->get('/sites');
+        return array_map(
+            fn ($siteData) => new Site(
+                $this->webflow,
+                $siteData['_id'],
+                new DateTime($siteData['createdOn']),
+                $siteData['name'],
+                $siteData['shortName'],
+                new DateTimeZone($siteData['timezone'])
+            ),
+            $this->webflow->get('/sites')
+        );
     }
 
     public function get(string $siteId): Site
