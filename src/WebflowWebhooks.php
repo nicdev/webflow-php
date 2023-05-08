@@ -3,8 +3,6 @@
 namespace Nicdev\WebflowSdk;
 
 use DateTime;
-use DateTimeZone;
-use Nicdev\WebflowSdk\Entities\Site;
 use Nicdev\WebflowSdk\Entities\Webhook;
 
 class WebflowWebhooks
@@ -30,20 +28,20 @@ class WebflowWebhooks
                 ) : null,
                 filter: isset($webhook['filter']) ? $webhook['filter'] : [],
             );
-        }, $this->webflow->get('/sites/' . $siteId . '/webhooks'));
+        }, $this->webflow->get('/sites/'.$siteId.'/webhooks'));
     }
 
     public function get(string $siteId, string $webhookId): Webhook
     {
-        $webhookData = $this->webflow->getWebhook($siteId ,$webhookId);
+        $webhookData = $this->webflow->getWebhook($siteId, $webhookId);
 
         return new Webhook(
-            $this->webflow, 
-            $webhookData['_id'], 
+            $this->webflow,
+            $webhookData['_id'],
             $webhookData['triggerType'],
             $webhookData['triggerId'],
             $webhookData['site'],
-            new DateTime($webhookData['createdOn']), 
+            new DateTime($webhookData['createdOn']),
             new DateTime($webhookData['lastUsed']),
             $webhookData['filter'],
         );
