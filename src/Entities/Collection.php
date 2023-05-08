@@ -6,18 +6,17 @@ use DateTime;
 use DateTimeZone;
 use Nicdev\WebflowSdk\Webflow;
 
-class Webhook
+class Collection
 {
     public function __construct(
         private Webflow $webflow,
         protected string $_id,
-        readonly string $triggerType,
-        readonly string $triggerId,
-        readonly string $site,
+        readonly DateTime $lastUpdated,
         readonly DateTime $createdOn,
-        readonly DateTime|null $lastUsed = null,
-        readonly array $filter = [],
+        readonly string $name,
+        readonly string $slug,
+        readonly string $singularName,
+        readonly array $fields = [],
     ) {
     }
 }
-

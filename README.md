@@ -362,6 +362,9 @@ $siteId = 'your-site-id';
 $webflow->getEcommerceSettings($siteId);
 ```
 
+## Entities Style Functionality
+
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 

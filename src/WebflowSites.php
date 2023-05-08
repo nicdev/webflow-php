@@ -27,8 +27,7 @@ class WebflowSites
             new DateTime($siteData['createdOn']),
             $siteData['name'],
             $siteData['shortName'],
-            new DateTimeZone($siteData['timezone']),
-            $siteData['database']
+            new DateTimeZone($siteData['timezone'])
         );
     }
 }

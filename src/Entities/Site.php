@@ -5,14 +5,16 @@ namespace Nicdev\WebflowSdk\Entities;
 use DateTime;
 use DateTimeZone;
 use Nicdev\WebflowSdk\Webflow;
+use Nicdev\WebflowSdk\WebflowCollections;
+use Nicdev\WebflowSdk\WebflowWebhooks;
 
 class Site
 {
     protected array $domains;
 
-    protected array $webhooks;
+    protected WebflowWebhooks $webhooks;
 
-    protected array $collections;
+    protected WebflowCollections $collections;
 
     public function __construct(
         private Webflow $webflow,
@@ -21,8 +23,10 @@ class Site
         readonly string $name,
         readonly string $shortName,
         readonly DateTimeZone $timezone,
-        readonly string $database
+        readonly string|null $database = null
     ) {
+        $this->collections = new WebflowCollections($this->webflow, $this->_id);
+        $this->webhooks = new WebflowWebhooks($this->webflow, $this->_id);
     }
 
     public function __get($name)
@@ -31,79 +35,43 @@ class Site
             'domains' => isset($this->domains) ? $this->domains : $this->domains(),
             'webhooks' => isset($this->webhooks) ? $this->webhooks : $this->webhooks(),
             'collections' => isset($this->collections) ? $this->collections : $this->collections(),
-            default => throw new \Exception("Property {$name} does not exist on ".$this::class)
+            default => throw new \Exception("Property {$name} does not exist on " . $this::class)
         };
     }
 
     public function publish(): array
     {
-        return $this->webflow->post('/sites/'.$this->_id.'/publish');
+        return $this->webflow->post('/sites/' . $this->_id . '/publish');
     }
 
     public function domains()
     {
-        $this->domains = $this->webflow->get('/sites/'.$this->_id.'/domains');
+        $this->domains = $this->webflow->get('/sites/' . $this->_id . '/domains');
 
         return $this->domains;
     }
 
-    public function webhooks()
+    public function webhooks($webhookId = null)
     {
-        $webhooks = $this->webflow->get('/sites/'.$this->_id.'/webhooks');
-        $this->webhooks = array_map(function ($webhook) {
-            return new Webhook(
-                $this->webflow,
-                $webhook['_id'],
-                $webhook['triggerType'],
-                $webhook['triggerId'],
-                $webhook['site'],
-                $webhook['url'],
-                new DateTime(
-                    $webhook['createdOn']
-                ),
-                $webhook['filter'],
-            );
-        }, $webhooks);
-
-        return $this->webhooks;
+        return $webhookId ? [$this->webhooks->get($webhookId)] : $this->webhooks->list();
     }
 
-    public function webhook(string|array $webhookData): Webhook
+    public function collections($collectionId = null)
     {
-        if(is_string($webhookData)) {
-            $webhookId = $webhookData;
-        } else if (isset($webhookData['_id'])) {
-            $webhookId = $webhookData['_id'];
-        } else {
-            return new Webhook(
-                webflow: $this->webflow,
-                triggerType: isset($webhookData['triggerType']) ? $webhookData['triggerType'] : '',
-                site: $this->_id,
-                url: isset($webhookData['url']) ? $webhookData['url'] : '',
-                createdOn: isset($webhookData['createdOn']) ? new DateTime($webhookData['createdOn']) : new DateTime(),
-                filter: isset($webhookData['filter']) ? $webhookData['filter'] : [],
-            );
+        if ($collectionId) {
+            return $this->collections->get($collectionId);
         }
-
-        $webhookData = $this->webflow->get('/sites/'.$this->_id.'/webhooks/'.$webhookId);
-
-        return new Webhook(
-            $this->webflow,
-            $webhookData['_id'],
-            $webhookData['triggerType'],
-            $webhookData['triggerId'],
-            $webhookData['site'],
-            $webhookData['url'],
-            new DateTime(
-                $webhookData['createdOn']
-            ),
-            $webhookData['filter'],
-        );
-    }
-
-    public function collections()
-    {
-        $this->collections = $this->webflow->get('/sites/'.$this->_id.'/collections');
+        return array_map(function ($collection) {
+            return new Collection(
+                $this->webflow,
+                $collection['_id'],
+                new DateTime($collection['lastUpdated']),
+                new DateTime($collection['createdOn']),
+                $collection['name'],
+                $collection['slug'],
+                $collection['singularName']
+            );
+        }, $this->collections->list($this->_id));
 
         return $this->collections;
     }
