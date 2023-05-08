@@ -18,7 +18,7 @@ class Site
 
     public function __construct(
         private Webflow $webflow,
-        protected string $_id,
+        readonly string $_id,
         readonly DateTime $createdOn,
         readonly string $name,
         readonly string $shortName,

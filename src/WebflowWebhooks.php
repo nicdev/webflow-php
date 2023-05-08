@@ -33,9 +33,9 @@ class WebflowWebhooks
         }, $this->webflow->get('/sites/' . $siteId . '/webhooks'));
     }
 
-    public function get(string $webhookId): Webhook
+    public function get(string $siteId, string $webhookId): Webhook
     {
-        $webhookData = $this->webflow->get('/collections/' . $webhookId);
+        $webhookData = $this->webflow->getWebhook($siteId ,$webhookId);
 
         return new Webhook(
             $this->webflow, 
