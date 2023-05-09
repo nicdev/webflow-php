@@ -14,11 +14,11 @@ class HttpClient
     /**
      * Create a new HttpClient instance.
      *
-     * @param string $token The API token to use.
-     * @param \GuzzleHttp\Client|null $client The Guzzle HTTP client to use.
-     * @param array $headers An array of headers to include in all requests.
-     * @param array $result The result of the last API request.
-     * @param array $history An array of HTTP transactions made by the client.
+     * @param  string  $token The API token to use.
+     * @param  \GuzzleHttp\Client|null  $client The Guzzle HTTP client to use.
+     * @param  array  $headers An array of headers to include in all requests.
+     * @param  array  $result The result of the last API request.
+     * @param  array  $history An array of HTTP transactions made by the client.
      */
     public function __construct(
         private $token,
@@ -37,7 +37,7 @@ class HttpClient
         }
 
         $this->headers = ['headers' => [
-            'Authorization' => 'Bearer ' . $this->token,
+            'Authorization' => 'Bearer '.$this->token,
             'Accept' => 'application/json',
         ]];
     }
@@ -45,8 +45,8 @@ class HttpClient
     /**
      * Send a GET request to the API.
      *
-     * @param string $path The path of the API endpoint.
-     * @param array $query An optional array of query parameters.
+     * @param  string  $path The path of the API endpoint.
+     * @param  array  $query An optional array of query parameters.
      * @return array The decoded JSON response from the API.
      */
     public function get($path, array $query = []): array
@@ -59,8 +59,8 @@ class HttpClient
     /**
      * Send a POST request to the API.
      *
-     * @param string $path The path of the API endpoint.
-     * @param array $payload An optional array of data to include in the request body.
+     * @param  string  $path The path of the API endpoint.
+     * @param  array  $payload An optional array of data to include in the request body.
      * @return array The decoded JSON response from the API.
      */
     public function post($path, $payload = []): array
@@ -73,7 +73,7 @@ class HttpClient
     /**
      * Send a DELETE request to the API.
      *
-     * @param string $path The path of the API endpoint.
+     * @param  string  $path The path of the API endpoint.
      * @return array The decoded JSON response from the API.
      */
     public function delete($path): array
@@ -86,12 +86,12 @@ class HttpClient
     /**
      * Send a PUT request to the API.
      *
-     * @param string $path The path of the API endpoint.
+     * @param  string  $path The path of the API endpoint.
      * @return array The decoded JSON response from the API.
      */
-    public function put($path): array
+    public function put($path, $payload): array
     {
-        $response = $this->client->put($path, $this->headers);
+        $response = $this->client->put($path, [...$this->headers, 'json' => $payload]);
 
         return $this->respond($response);
     }
@@ -99,12 +99,12 @@ class HttpClient
     /**
      * Send a PATCH request to the API.
      *
-     * @param string $path The path of the API endpoint.
+     * @param  string  $path The path of the API endpoint.
      * @return array The decoded JSON response from the API.
      */
-    public function patch($path): array
+    public function patch($path, $payload): array
     {
-        $response = $this->client->patch($path, $this->headers);
+        $response = $this->client->patch($path, [...$this->headers, 'json' => $payload]);
 
         return $this->respond($response);
     }
@@ -112,7 +112,7 @@ class HttpClient
     /**
      * Process the response from the API and return the decoded JSON data.
      *
-     * @param \Psr\Http\Message\ResponseInterface $response The HTTP response from the API.
+     * @param  \Psr\Http\Message\ResponseInterface  $response The HTTP response from the API.
      * @return array The decoded JSON data from the response body.
      */
     public function respond(ResponseInterface $response): array
@@ -121,6 +121,7 @@ class HttpClient
         if ($response->getStatusCode() === 200) {
             return $this->result;
         }
+
         return [];
     }
 

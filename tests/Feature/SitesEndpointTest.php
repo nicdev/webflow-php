@@ -35,7 +35,7 @@ it('lists sites', function () {
 
 it('gets a site', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->fetchSite('foo');
+    $data = $this->webflowApiClient->getSite('foo');
     expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('GET');
     expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo');

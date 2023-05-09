@@ -33,22 +33,44 @@ it('lists the webhooks for a site', function () {
     ]);
 });
 
-it('creates a webhook', function () {
+it('gets a webhook', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
-    $data = $this->webflowApiClient->createWebhook('foo');
+    $data = $this->webflowApiClient->getWebhook('foo', 'bar');
     expect($data)->toBeArray();
-    expect($this->container[0]['request']->getMethod())->toBe('POST');
-    expect($this->container[0]['request']->getUri()->getPath())->toBe('/webhooks/foo');
+    expect($this->container[0]['request']->getMethod())->toBe('GET');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/webhooks/bar');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
         'Authorization' => ['Bearer foo'],
         'Accept' => ['application/json'],
     ]);
-})->skip('//TODO need to finish implementing webhook creation options');
+});
+
+it('creates a webhook', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->createWebhook('foo', 'form_submission', 'http://foo.com', ['foo' => 'bar']);
+    expect($data)->toBeArray();
+    expect($this->container[0]['request']->getMethod())->toBe('POST');
+    expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/webhooks');
+    expect($this->container[0]['request']->getHeaders())->toMatchArray([
+        'Authorization' => ['Bearer foo'],
+        'Accept' => ['application/json'],
+    ]);
+    expect(json_decode($this->container[0]['request']->getBody()->getContents(), true))->toMatchArray([
+        'filter' => ['foo' => 'bar'],
+        'triggerType' => 'form_submission',
+        'url' => 'http://foo.com',
+    ]);
+});
+
+it('creates requires a valid trigger type to create a webhook', function () {
+    $this->mockHandler->append(new Response(200, [], json_encode([])));
+    $data = $this->webflowApiClient->createWebhook('foo', 'not_a_valid_trigger', 'http://foo.com', ['foo' => 'bar']);
+})->throws(\Exception::class);
 
 it('deletes a webhook', function () {
     $this->mockHandler->append(new Response(200, [], json_encode([])));
     $data = $this->webflowApiClient->deleteWebhook('foo', 'bar');
-    expect($data)->toBeNull();
+    expect($data)->toBeArray();
     expect($this->container[0]['request']->getMethod())->toBe('DELETE');
     expect($this->container[0]['request']->getUri()->getPath())->toBe('/sites/foo/webhooks/bar');
     expect($this->container[0]['request']->getHeaders())->toMatchArray([
