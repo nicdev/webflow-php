@@ -30,14 +30,6 @@ class Webflow extends HttpClient
         parent::__construct($token, $client);
     }
 
-    public function __get($name)
-    {
-        return match ($name) {
-            'sites' => $this->sites()->list(),
-            default => throw new Exception("Property {$name} does not exist on ".$this::class)
-        };
-    }
-
     /**
      * Set page size for paginated requests.
      */
