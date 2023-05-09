@@ -18,4 +18,9 @@ class Webhook
         readonly array $filter = [],
     ) {
     }
+
+    public function delete(): void
+    {
+        $this->webflow->deleteWebhook($this->site, $this->_id);
+    }
 }
