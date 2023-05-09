@@ -12,6 +12,14 @@ class Site
 {
     protected array $domains;
 
+    protected array $webhooks;
+
+    protected array $collections;
+    
+    protected array $orders;
+
+    protected array $products;
+
     public function __construct(
         private Webflow $webflow,
         readonly string $_id,
@@ -29,6 +37,8 @@ class Site
             'domains' => isset($this->domains) ? $this->domains : $this->domains(),
             'webhooks' => isset($this->webhooks) ? $this->webhooks : $this->webhooks(),
             'collections' => isset($this->collections) ? $this->collections : $this->collections(),
+            'orders' => isset($this->orders) ? $this->orders : $this->orders(),
+            'products' => isset($this->products) ? $this->products : $this->products(),
             default => throw new \Exception("Property {$name} does not exist on ".$this::class)
         };
     }
@@ -84,5 +94,30 @@ class Site
                 $collection['singularName']
             );
         }, $collections);
+    }
+
+    public function orders($orderId = null)
+    {
+        $orders = $orderId ? [$this->webflow->getOrder( $this->_id,  $orderId)] : $this->webflow->listOrders($this->_id);
+        
+        return array_map(function ($order) {
+            return new Order(
+                $this->webflow,
+                $order['orderId'],
+                $order
+            );
+        }, $orders);
+    }
+
+    public function products($productId = null)
+    {
+        $products = $productId ? [$this->webflow->getProduct( $this->_id,  $productId)] : $this->webflow->listProducts($this->_id);
+        
+        return array_map(function ($product) {
+            return new Product(
+                $this->webflow,
+                $product
+            );
+        }, $products);
     }
 }
