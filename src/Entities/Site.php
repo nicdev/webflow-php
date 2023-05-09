@@ -6,6 +6,9 @@ use DateTime;
 use DateTimeZone;
 use Nicdev\WebflowSdk\Webflow;
 
+/**
+ * Represents a Webflow site entity.
+ */
 class Site
 {
     protected array $domains;
@@ -18,6 +21,17 @@ class Site
 
     protected array $products;
 
+    /**
+     * Site constructor.
+     *
+     * @param  Webflow  $webflow Webflow instance
+     * @param  string  $_id Site ID
+     * @param  DateTime  $createdOn Site creation date
+     * @param  string  $name Site name
+     * @param  string  $shortName Site short name
+     * @param  DateTimeZone  $timezone Site timezone
+     * @param  string|null  $database Site database, nullable
+     */
     public function __construct(
         private Webflow $webflow,
         readonly string $_id,
@@ -29,6 +43,14 @@ class Site
     ) {
     }
 
+    /**
+     * Get site property value by its name.
+     *
+     * @param  string  $name Property name
+     * @return mixed
+     *
+     * @throws \Exception
+     */
     public function __get($name)
     {
         return match ($name) {
@@ -41,6 +63,9 @@ class Site
         };
     }
 
+    /**
+     * Publishes the site.
+     */
     public function publish(): Site
     {
         $this->webflow->post('/sites/'.$this->_id.'/publish');
@@ -48,6 +73,11 @@ class Site
         return $this;
     }
 
+    /**
+     * Retrieves site domains.
+     *
+     * @return array
+     */
     public function domains()
     {
         $this->domains = $this->webflow->get('/sites/'.$this->_id.'/domains');
@@ -55,6 +85,12 @@ class Site
         return $this->domains;
     }
 
+    /**
+     * Retrieves site webhooks.
+     *
+     * @param  string|null  $webhookId Optional webhook ID
+     * @return array
+     */
     public function webhooks($webhookId = null)
     {
         $webhooks = $webhookId ? [$this->webflow->getWebhook($this->_id, $webhookId)] : $this->webflow->listWebhooks($this->_id);
@@ -77,6 +113,12 @@ class Site
         }, $webhooks);
     }
 
+    /**
+     * Retrieves site collections.
+     *
+     * @param  string|null  $collectionId Optional collection ID
+     * @return array
+     */
     public function collections($collectionId = null)
     {
         $collections = $collectionId ? [$this->webflow->getCollection($collectionId)] : $this->webflow->listCollections($this->_id);
@@ -94,6 +136,12 @@ class Site
         }, $collections);
     }
 
+    /**
+     * Retrieves site orders.
+     *
+     * @param  string|null  $orderId Optional order ID
+     * @return array
+     */
     public function orders($orderId = null)
     {
         $orders = $orderId ? [$this->webflow->getOrder($this->_id, $orderId)] : $this->webflow->listOrders($this->_id);
@@ -107,6 +155,12 @@ class Site
         }, $orders);
     }
 
+    /**
+     * Retrieves site products.
+     *
+     * @param  string|null  $productId Optional product ID
+     * @return array
+     */
     public function products($productId = null)
     {
         $products = $productId ? [$this->webflow->getProduct($this->_id, $productId)] : $this->webflow->listProducts($this->_id);
