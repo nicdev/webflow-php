@@ -12,6 +12,51 @@ The second way is through the use of entities. When you request a site (or list 
 
 [See the Entities documentation](#entities)
 
+Copy code
+# Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Client (API Wrapper)](#client-api-wrapper)
+    - [Get the current user's information](#get-the-current-users-information)
+    - [Get the authenticated user's authorization information](#get-the-authenticated-users-authorization-information)
+    - [List all sites associated with the authenticated user](#list-all-sites-associated-with-the-authenticated-user)
+    - [Fetch a specific site by its ID](#fetch-a-specific-site-by-its-id)
+    - [Publish a specific site by its ID](#publish-a-specific-site-by-its-id)
+    - [List all domains associated with a specific site by its ID](#list-all-domains-associated-with-a-specific-site-by-its-id)
+    - [List all webhooks associated with a specific site by its ID](#list-all-webhooks-associated-with-a-specific-site-by-its-id)
+    - [Fetch a specific webhook associated with a specific site by their IDs](#fetch-a-specific-webhook-associated-with-a-specific-site-by-their-ids)
+    - [Create a webhook for a specific site](#create-a-webhook-for-a-specific-site)
+    - [Delete a webhook for a specific site](#delete-a-webhook-for-a-specific-site)
+    - [List all collections for a specific site](#list-all-collections-for-a-specific-site)
+    - [Fetch a specific collection by its ID](#fetch-a-specific-collection-by-its-id)
+    - [List items for a specific collection by its ID](#list-items-for-a-specific-collection-by-its-id)
+    - [Create an item in a specific collection by its ID](#create-an-item-in-a-specific-collection-by-its-id)
+    - [Get an item by its ID](#get-an-item-by-its-id)
+    - [Publish one or more items by their ID](#publish-one-or-more-items-by-their-id)
+    - [Update an item by its ID](#update-an-item-by-its-id)
+    - [Patch an item by its ID](#patch-an-item-by-its-id)
+    - [Delete or un-publish an item by its ID](#delete-or-un-publish-an-item-by-its-id)
+    - [List products/SKUs for a specific site by its ID](#list-products-skus-for-a-specific-site-by-its-id)
+    - [Create a Product and SKU](#create-a-product-and-sku)
+    - [Get Products and SKUs](#get-products-and-skus)
+    - [Update a Product](#update-a-product)
+    - [Create a SKU](#create-a-sku)
+    - [Update a SKU](#update-a-sku)
+    - [Inventory for a specific item](#inventory-for-a-specific-item)
+    - [Update Inventory](#update-inventory)
+    - [List orders](#list-orders)
+    - [Get an Order](#get-an-order)
+    - [Update an Order](#update-an-order)
+    - [Fulfill an Order](#fulfill-an-order)
+    - [Un-fulfill an Order](#un-fulfill-an-order)
+    - [Refund an Order](#refund-an-order)
+    - [Get Ecommerce settings for a Site](#get-ecommerce-settings-for-a-site)
+  - [Entities](#entities)
+    - [Get sites](#get-sites)
+    - [Fetch a specific site by its ID](#fetch-a-specific-site-by-its-id-1)
+    - [Publish a domain](#publish-a-domain)
+
 ## BEWARE! This is a super early version in active development. So please be careful if you decide to use it ✌️
 
 ## Installation
