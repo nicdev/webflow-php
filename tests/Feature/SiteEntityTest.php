@@ -42,5 +42,5 @@ test('webhooks', function () {
 });
 
 test('collections', function () {
-   
+
 });
