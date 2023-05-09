@@ -35,6 +35,14 @@ class Collection
     ) {
     }
 
+    public function __get($name)
+    {
+        return match ($name) {
+            'items' => $this->items(),
+            default => throw new \Exception("Property {$name} does not exist on ".$this::class)
+        };
+    }
+
     /**
      * Retrieve a single item or a list of items from the collection.
      *

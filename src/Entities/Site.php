@@ -95,7 +95,7 @@ class Site
     {
         $webhooks = $webhookId ? [$this->webflow->getWebhook($this->_id, $webhookId)] : $this->webflow->listWebhooks($this->_id);
 
-        return array_map(function ($webhook) {
+        $webhookEntities = array_map(function ($webhook) {
             return new Webhook(
                 $this->webflow,
                 _id: $webhook['_id'],
@@ -111,6 +111,8 @@ class Site
                 filter: isset($webhook['filter']) ? $webhook['filter'] : [],
             );
         }, $webhooks);
+
+        return $webhookId ? $webhookEntities[0] : $webhookEntities;
     }
 
     /**
@@ -123,7 +125,7 @@ class Site
     {
         $collections = $collectionId ? [$this->webflow->getCollection($collectionId)] : $this->webflow->listCollections($this->_id);
 
-        return array_map(function ($collection) {
+        $collectionEntities = array_map(function ($collection) {
             return new Collection(
                 $this->webflow,
                 $collection['_id'],
@@ -134,6 +136,8 @@ class Site
                 $collection['singularName']
             );
         }, $collections);
+
+        return $collectionId ? $collectionEntities[0] : $collectionEntities;
     }
 
     /**
@@ -146,13 +150,15 @@ class Site
     {
         $orders = $orderId ? [$this->webflow->getOrder($this->_id, $orderId)] : $this->webflow->listOrders($this->_id);
 
-        return array_map(function ($order) {
+        $orderEntities = array_map(function ($order) {
             return new Order(
                 $this->webflow,
                 $order['orderId'],
                 $order
             );
         }, $orders);
+
+        return $orderId ? $orderEntities[0] : $orderEntities;
     }
 
     /**
@@ -165,11 +171,13 @@ class Site
     {
         $products = $productId ? [$this->webflow->getProduct($this->_id, $productId)] : $this->webflow->listProducts($this->_id);
 
-        return array_map(function ($product) {
+        $productEntities = array_map(function ($product) {
             return new Product(
                 $this->webflow,
                 $product
             );
         }, $products);
+
+        return $productId ? $productEntities[0] : $productEntities;
     }
 }

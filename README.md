@@ -10,7 +10,7 @@ There are two main ways to use this library. Directly as an API wrapper through 
 
 The second way is through the use of entities. When you request a site (or list of sites) you'll get back `Nicdev\WebflowSdk\Entities\Site` which can be interacted with to get its collections, and other associated entities, as well as publish and interact with the site itself.
 
-
+[See the Entities documentation](#entities)
 
 ## BEWARE! This is a super early version in active development. So please be careful if you decide to use it ✌️
 
@@ -55,7 +55,7 @@ $sites = $webflow->listSites();
 ### Fetch a specific site by its ID
 
 ```php
-$site = $webflow->fetchSite($siteId);
+$site = $webflow->getSite($siteId);
 ```
 
 ### Publish a specific site by its ID
@@ -316,8 +316,78 @@ $webflow->refundOrder($siteId, $orderId);
 $webflow->getEcommerceSettings($siteId);
 ```
 
-## Entities Functionality
+## Entities
 
+To use this SDK, first create a new instance of the `Webflow` class with your API token.
+
+```php
+use Nicdev\WebflowSdk\Webflow;
+
+$token = 'your-webflow-api-token';
+$webflow = new Webflow($token);
+```
+
+### Get sites 
+
+```php
+$sites = $webflow->sites; // [Site $site1, Site $site2...]
+// or
+$sites = $webflow->sites()->get(); // [Site $site1, Site $site2...]
+```
+
+### Fetch a specific site by its ID
+
+```php
+$site = $webflow->sites($siteId) // Site $site;
+// or
+$site = $webflow->sites()->get($siteId) // Site $site;
+```
+
+# Get site's collections
+
+```php
+$site->collections; // [Collection $collection1, Collection $collection2, ...]
+// or
+$site->collections(); // [Collection $collection1, Collection $collection2, ...]
+```
+
+### Fetch a specific collection by its ID
+
+```php
+$site->collections($collectionId) // Collection $collection;
+```
+
+### Fetch a collection's items
+
+```php
+$site->collections($collectionId)->items(); // [Item $item1, Item $item2, ...]
+// or
+$site->collections($collectionId)->items; // [Item $item1, Item $item2, ...]
+```
+
+### Fetch a site's webhooks
+
+```php
+$site->webhooks(); // [Webhook $webhook1, Webhook $webhook2, ...]
+// or
+$site->webhooks; // [Webhook $webhook1, Webhook $webhook2, ...]
+```
+
+### Fetch a site's products
+
+```php
+$site->products(); // [Product $product1, Product $product2, ...]
+// or
+$site->products; // [Product $product1, Product $product2, ...]
+```
+
+### Fetch a site's orders
+
+```php
+$site->webhooks(); // [Order $order1, Order $order2, ...]
+// or
+$site->webhooks; // [Order $order1, Order $order2, ...]
+```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
