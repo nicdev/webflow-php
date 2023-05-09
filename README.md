@@ -369,7 +369,7 @@ $webflow->refundOrder($siteId, $orderId);
 $webflow->getEcommerceSettings($siteId);
 ```
 
-## Entities
+# Entities
 
 To use this SDK, first create a new instance of the `Webflow` class with your API token.
 
