@@ -343,6 +343,20 @@ $site = $webflow->sites($siteId) // Site $site;
 $site = $webflow->sites()->get($siteId) // Site $site;
 ```
 
+### Publish a domain
+
+```php
+$site->publish();
+```
+
+### Get a site's domains
+
+```php
+$webflow->sites($siteId)->domains();
+// or
+$webflow->sites($siteId)->domains;
+```
+
 # Get site's collections
 
 ```php
