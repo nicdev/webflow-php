@@ -7,8 +7,6 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use Nicdev\WebflowSdk\HttpClient;
 
-// use Mockery;
-
 // use Illuminate\Support\HttpClient;
 beforeEach(function () {
     $this->container = [];

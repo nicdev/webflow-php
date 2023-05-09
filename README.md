@@ -1,5 +1,7 @@
 # Webflow PHP SDK
 
+**This is open source software and not in any official way supported by Webflow.**
+
 This PHP SDK allows you to interact with the Webflow API easily. The Webflow class provides methods to manage sites, domains, webhooks, and collections.
 
 ## BEWARE! This is a super early version in active development. So please be careful if you decide to use it ✌️
@@ -256,6 +258,112 @@ $sku = [
 ];
 $webflow->createSku($siteId, $product, $sku);
 ```
+
+### Update a SKU
+
+```php
+$siteId = 'your-site-id';
+$product = 'your-product-id';
+$skuId = 'your-sku-id';
+$sku = [
+    'slug' => 'foo-bar-Medium',
+    'name' => 'Foo Bar (M) Discounted!!',
+    'price' => [
+        'value' => 1290,
+        'unit' => 'USD'
+    ]
+];
+
+$webflow->updateSku($siteId, $productId, $skuId, $sku);
+```
+
+### Inventory for a specific item
+
+```php
+$collectionId = 'your-collection-id'; //likely to be the SKUs collection.
+$skuId = 'your-sku-id';
+
+$webflow->getInventory($collectionId, $skuId)
+```
+
+### Update Inventory
+```php
+$collectionId = 'your-collection-id';
+$skuId = 'your-sku-id';
+$fields = [
+    'inventory_type' => 'infinite'
+];
+
+$webflow->updateInventory($collectionId, $skuId, $fields);
+```
+
+### List orders
+
+```php
+$collectionId = 'your-collection-id';
+$page = 1; // Optional page number
+
+$items = $webflow->listOrders($collectionId, $page);
+```
+
+### Get an Order
+
+```php
+$siteId = 'your-site-id';
+$orderId = 'your-order-id';
+
+$webflow->getOrdr($siteId, $orderId)
+```
+
+### Update an Order
+
+```php
+$siteId = 'your-site-id';
+$orderId = 'your-order-id';
+$fields = [
+    'comment' => 'Adding a comment to this order'
+];
+
+$webflow->updateOrder$siteId, $orderId, $fields);
+```
+
+### Fulfill an Order
+
+```php
+$siteId = 'your-site-id';
+$orderId = 'your-order-id';
+$notifyCustomer = true; // Optional, defaults to false
+
+$webflow->fullfillOrder($siteId, $orderId, $notifyCustomer);
+```
+
+### Un-fulfill an Order
+
+```php
+$siteId = 'your-site-id';
+$orderId = 'your-order-id';
+
+$webflow->unfulfillOrder($siteId, $orderId);
+```
+
+### Refund an Order
+
+```php
+$siteId = 'your-site-id';
+$orderId = 'your-order-id';
+
+$webflow->refundOrder($siteId, $orderId);
+```
+
+### Get Ecommerce settings for a Site
+
+```php
+$siteId = 'your-site-id';
+$webflow->getEcommerceSettings($siteId);
+```
+
+## Entities Style Functionality
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
