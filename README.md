@@ -12,7 +12,6 @@ The second way is through the use of entities. When you request a site (or list 
 
 [See the Entities documentation](#entities)
 
-Copy code
 # Table of Contents
 
 - [Installation](#installation)
