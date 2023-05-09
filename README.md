@@ -56,6 +56,15 @@ Copy code
     - [Get sites](#get-sites)
     - [Fetch a specific site by its ID](#fetch-a-specific-site-by-its-id-1)
     - [Publish a domain](#publish-a-domain)
+    - [Get a site's domains](#get-a-sites-domains)
+    - [Get site's collections](#get-sites-collections)
+    - [Fetch a specific collection by its ID](#fetch-a-specific-collection-by-its-id)
+    - [Fetch a collection's items](#fetch-a-collections-items)
+    - [Fetch a site's webhooks](#fetch-a-sites-webhooks)
+    - [Fetch a site's products](#fetch-a-sites-products)
+    - [Fetch a site's orders](#fetch-a-sites-orders)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## BEWARE! This is a super early version in active development. So please be careful if you decide to use it ✌️
 
