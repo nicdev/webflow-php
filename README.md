@@ -332,7 +332,7 @@ $webflow = new Webflow($token);
 ```php
 $sites = $webflow->sites; // [Site $site1, Site $site2...]
 // or
-$sites = $webflow->sites()->get(); // [Site $site1, Site $site2...]
+$sites = $webflow->sites()->list(); // [Site $site1, Site $site2...]
 ```
 
 ### Fetch a specific site by its ID
