@@ -357,7 +357,7 @@ $webflow->sites($siteId)->domains();
 $webflow->sites($siteId)->domains;
 ```
 
-# Get site's collections
+### Get site's collections
 
 ```php
 $site->collections; // [Collection $collection1, Collection $collection2, ...]
