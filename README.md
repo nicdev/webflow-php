@@ -24,7 +24,7 @@ composer require nicdev/webflow-sdk
 
 # Usage
 
-#webflow-client-usage
+# Client (API Wrapper)
 To use this SDK, first create a new instance of the `Webflow` class with your API token.
 
 ```php
