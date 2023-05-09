@@ -22,14 +22,14 @@ class Collection
     public function items(string $itemId = null): Item|array
     {
         $items = $itemId ? $this->webflow->getItem($this->_id, $itemId)['items'] : $this->webflow->listItems($this->_id)['items'];
-        
+
         return array_map(function ($item) {
             return new Item(
                 $this->webflow,
                 _id: $item['_id'],
                 draft: $item['_draft'],
                 archived: $item['_archived'],
-                fields: array($item)
+                fields: [$item]
             );
         }, $items);
     }

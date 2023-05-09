@@ -2,7 +2,6 @@
 
 namespace Nicdev\WebflowSdk\Entities;
 
-use DateTime;
 use Nicdev\WebflowSdk\Webflow;
 
 class Item
@@ -15,5 +14,4 @@ class Item
         public array $fields,
     ) {
     }
-
 }

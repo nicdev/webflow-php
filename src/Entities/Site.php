@@ -5,8 +5,6 @@ namespace Nicdev\WebflowSdk\Entities;
 use DateTime;
 use DateTimeZone;
 use Nicdev\WebflowSdk\Webflow;
-use Nicdev\WebflowSdk\WebflowCollections;
-use Nicdev\WebflowSdk\WebflowWebhooks;
 
 class Site
 {
@@ -15,7 +13,7 @@ class Site
     protected array $webhooks;
 
     protected array $collections;
-    
+
     protected array $orders;
 
     protected array $products;
@@ -82,7 +80,7 @@ class Site
     public function collections($collectionId = null)
     {
         $collections = $collectionId ? [$this->webflow->getCollection($collectionId)] : $this->webflow->listCollections($this->_id);
-        
+
         return array_map(function ($collection) {
             return new Collection(
                 $this->webflow,
@@ -98,8 +96,8 @@ class Site
 
     public function orders($orderId = null)
     {
-        $orders = $orderId ? [$this->webflow->getOrder( $this->_id,  $orderId)] : $this->webflow->listOrders($this->_id);
-        
+        $orders = $orderId ? [$this->webflow->getOrder($this->_id, $orderId)] : $this->webflow->listOrders($this->_id);
+
         return array_map(function ($order) {
             return new Order(
                 $this->webflow,
@@ -111,8 +109,8 @@ class Site
 
     public function products($productId = null)
     {
-        $products = $productId ? [$this->webflow->getProduct( $this->_id,  $productId)] : $this->webflow->listProducts($this->_id);
-        
+        $products = $productId ? [$this->webflow->getProduct($this->_id, $productId)] : $this->webflow->listProducts($this->_id);
+
         return array_map(function ($product) {
             return new Product(
                 $this->webflow,
