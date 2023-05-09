@@ -6,7 +6,7 @@ This PHP SDK allows you to interact with the Webflow API easily. The Webflow cla
 
 There are two main ways to use this library. Directly as an API wrapper through the `Webflow` class. This will provide you with methods analogous to those provided by the [REST API ](https://developers.webflow.com/reference) (e.g. [List Sites](https://developers.webflow.com/reference/list-sites) is `listSites()`). All methods return arrays and most endpoints are covered.
 
-[See the API client wrapper documentation](#webflow-client-usage)
+[See the API client wrapper documentation](#client-api-wrapper)
 
 The second way is through the use of entities. When you request a site (or list of sites) you'll get back `Nicdev\WebflowSdk\Entities\Site` which can be interacted with to get its collections, and other associated entities, as well as publish and interact with the site itself.
 
@@ -55,36 +55,30 @@ $sites = $webflow->listSites();
 ### Fetch a specific site by its ID
 
 ```php
-$siteId = 'your-site-id';
 $site = $webflow->fetchSite($siteId);
 ```
 
 ### Publish a specific site by its ID
 
 ```php
-$siteId = 'your-site-id';
 $webflow->publishSite($siteId);
 ```
 
 ### List all domains associated with a specific site by its ID
 
 ```php
-$siteId = 'your-site-id';
 $domains = $webflow->listDomains($siteId);
 ```
 
 ### List all webhooks associated with a specific site by its ID
 
 ```php
-$siteId = 'your-site-id';
 $webhooks = $webflow->listWebhooks($siteId);
 ```
 
 ### Fetch a specific webhook associated with a specific site by their IDs
 
 ```php
-$siteId = 'your-site-id';
-$webhookId = 'your-webhook-id';
 $webhook = $webflow->getWebhook($siteId, $webhookId);
 ```
 
@@ -93,7 +87,6 @@ $webhook = $webflow->getWebhook($siteId, $webhookId);
 ```php
 use Nicdev\WebflowSdk\Enums\WebhookTypes;
 
-$siteId = 'your-site-id';
 $triggerType = WebhookTypes::SITE_PUBLISH;
 $url = 'https://your-webhook-url.com';
 $filter = []; // Optional filter array
@@ -104,30 +97,24 @@ $webflow->createWebhook($siteId, $triggerType, $url, $filter);
 ### Delete a webhook for a specific site
 
 ```php
-$siteId = 'your-site-id';
-$webhookId = 'your-webhook-id';
-
 $webflow->deleteWebhook($siteId, $webhookId);
 ```
 
 ### List all collections for a specific site
 
 ```php
-$siteId = 'your-site-id';
 $collections = $webflow->listCollections($siteId);
 ```
 
 ### Fetch a specific collection by its ID
 
 ```php
-$collectionId = 'your-collection-id';
 $collection = $webflow->fetchCollection($collectionId);
 ```
 
 ### List items for a specific collection by its ID
 
 ```php
-$collectionId = 'your-collection-id';
 $page = 1; // Optional page number
 
 $items = $webflow->listItems($collectionId, $page);
@@ -136,7 +123,6 @@ $items = $webflow->listItems($collectionId, $page);
 ### Create an item in a specific collection by its ID
 
 ```php
-$collectionId = 'your-collection-id';
 $fields = [
     'field-name' => 'field-value',
     // ...
@@ -148,16 +134,12 @@ $item = $webflow->createItem($collectionId, $fields, $live);
 ### Get an item by its ID
 
 ```php
-$collectionId = 'your-collection-id';
-$itemId = 'your-item-id';
-
 $item = $webflow->getItem($collectionId, $itemId)
 ```
 
 ### Publish one or more items by their ID
 
 ```php
-$collectionId = 'your-collection-id';
 $itemIds = ['your-item-id', 'your-other-item-id'];
     
 $webflow->publishItems($collection, $itemIds);
@@ -166,8 +148,6 @@ $webflow->publishItems($collection, $itemIds);
 ### Update an item by its ID
 
 ```php
-$collectionId = 'your-collection-id';
-$itemId = 'your-item-id';
 $fields = $fields = [
     'field-name' => 'field-value',
     // ...
@@ -181,8 +161,6 @@ $webflow->updateItem($collectionId, $itemId, $fields, $live)
 _I don't see a real difference between the update and patch methods but they have been matched to their respective endpoints. For more information see [the documentation](https://developers.webflow.com/reference/update-item)._
 
 ```php
-$collectionId = 'your-collection-id';
-$itemId = 'your-item-id';
 $fields = $fields = [
     'field-name' => 'field-value',
     // ...
@@ -195,8 +173,6 @@ $webflow->updateItem($collectionId, $itemId, $fields, $live)
 ### Delete or un-publish an item by its ID
 
 ```php
-$collectionId = 'your-collection-id';
-$itemId = 'your-item-id';
 $live = true; // Optional. When set to true the item will be un-published but kept in the collection
 
 $webflow->deleteItem($collectionId, $itemId, $live)
@@ -206,7 +182,6 @@ $webflow->deleteItem($collectionId, $itemId, $live)
 
 
 ```php
-$siteId = 'your-site-id';
 $page = 1; // Optional page number
 $webflow->listProducts($siteId, $page);
 ```
@@ -214,7 +189,6 @@ $webflow->listProducts($siteId, $page);
 ### Create a Product and SKU
 
 ```php
-$siteId = 'your-site-id';
 $product = [
     'slug' = 'foo-bar',
     'name' => 'Foo Bar',
@@ -233,17 +207,12 @@ $webflow->createProductAndSku($siteId, $product, $sku)
 ### Get Products and SKUs
 
 ```php
-$siteId = 'your-site-id';
-$productId = 'your-product-id';
-
 $webflow->getProduct($site, $product);
 ```
 
 ### Update a Product
 
 ```php
-$siteId = 'your-site-id';
-$productId = 'your-product-id';
 $fields = [
     'name' => 'New Foo Bar',
     '_archived' => true
@@ -255,8 +224,6 @@ $webflow->updateProduct($siteId, $productId, $fields);
 ### Create a SKU
 
 ```php
-$siteId = 'your-site-id';
-$product 'your-product-id';
 $sku = [
     'slug' => 'foo-bar-Medium',
     'name' => 'Foo Bar (M)',
@@ -271,9 +238,6 @@ $webflow->createSku($siteId, $product, $sku);
 ### Update a SKU
 
 ```php
-$siteId = 'your-site-id';
-$product = 'your-product-id';
-$skuId = 'your-sku-id';
 $sku = [
     'slug' => 'foo-bar-Medium',
     'name' => 'Foo Bar (M) Discounted!!',
@@ -290,15 +254,11 @@ $webflow->updateSku($siteId, $productId, $skuId, $sku);
 
 ```php
 $collectionId = 'your-collection-id'; //likely to be the SKUs collection.
-$skuId = 'your-sku-id';
-
 $webflow->getInventory($collectionId, $skuId)
 ```
 
 ### Update Inventory
 ```php
-$collectionId = 'your-collection-id';
-$skuId = 'your-sku-id';
 $fields = [
     'inventory_type' => 'infinite'
 ];
@@ -309,7 +269,6 @@ $webflow->updateInventory($collectionId, $skuId, $fields);
 ### List orders
 
 ```php
-$collectionId = 'your-collection-id';
 $page = 1; // Optional page number
 
 $items = $webflow->listOrders($collectionId, $page);
@@ -318,17 +277,12 @@ $items = $webflow->listOrders($collectionId, $page);
 ### Get an Order
 
 ```php
-$siteId = 'your-site-id';
-$orderId = 'your-order-id';
-
 $webflow->getOrdr($siteId, $orderId)
 ```
 
 ### Update an Order
 
 ```php
-$siteId = 'your-site-id';
-$orderId = 'your-order-id';
 $fields = [
     'comment' => 'Adding a comment to this order'
 ];
@@ -339,8 +293,6 @@ $webflow->updateOrder$siteId, $orderId, $fields);
 ### Fulfill an Order
 
 ```php
-$siteId = 'your-site-id';
-$orderId = 'your-order-id';
 $notifyCustomer = true; // Optional, defaults to false
 
 $webflow->fullfillOrder($siteId, $orderId, $notifyCustomer);
@@ -349,29 +301,22 @@ $webflow->fullfillOrder($siteId, $orderId, $notifyCustomer);
 ### Un-fulfill an Order
 
 ```php
-$siteId = 'your-site-id';
-$orderId = 'your-order-id';
-
 $webflow->unfulfillOrder($siteId, $orderId);
 ```
 
 ### Refund an Order
 
 ```php
-$siteId = 'your-site-id';
-$orderId = 'your-order-id';
-
 $webflow->refundOrder($siteId, $orderId);
 ```
 
 ### Get Ecommerce settings for a Site
 
 ```php
-$siteId = 'your-site-id';
 $webflow->getEcommerceSettings($siteId);
 ```
 
-## Entities Style Functionality
+## Entities Functionality
 
 
 ## Contributing
