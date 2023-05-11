@@ -59,7 +59,7 @@ class Site
             'collections' => isset($this->collections) ? $this->collections : $this->collections(),
             'orders' => isset($this->orders) ? $this->orders : $this->orders(),
             'products' => isset($this->products) ? $this->products : $this->products(),
-            default => throw new \Exception("Property {$name} does not exist on ".$this::class)
+            default => throw new \Exception("Property {$name} does not exist on " . $this::class)
         };
     }
 
@@ -68,7 +68,7 @@ class Site
      */
     public function publish(): Site
     {
-        $this->webflow->post('/sites/'.$this->_id.'/publish');
+        $this->webflow->publishSite($this->_id);
 
         return $this;
     }
@@ -80,7 +80,7 @@ class Site
      */
     public function domains()
     {
-        $this->domains = $this->webflow->get('/sites/'.$this->_id.'/domains');
+        $this->domains = $this->webflow->listDomains($this->_id);
 
         return $this->domains;
     }
@@ -112,7 +112,12 @@ class Site
             );
         }, $webhooks);
 
-        return $webhookId ? $webhookEntities[0] : $webhookEntities;
+        if ($webhookId) {
+            return $webhookEntities[0];
+        }
+
+        $this->webhooks = $webhookEntities;
+        return $this->webhooks;
     }
 
     /**
@@ -137,7 +142,12 @@ class Site
             );
         }, $collections);
 
-        return $collectionId ? $collectionEntities[0] : $collectionEntities;
+        if ($collectionId) {
+            return $collectionEntities[0];
+        }
+
+        $this->collections = $collectionEntities;
+        return $this->collections;
     }
 
     /**
@@ -158,7 +168,12 @@ class Site
             );
         }, $orders);
 
-        return $orderId ? $orderEntities[0] : $orderEntities;
+        if($orderId) {
+            return $orderEntities[0];
+        }
+
+        $this->orders = $orderEntities;
+        return $this->orders;
     }
 
     /**
@@ -178,6 +193,10 @@ class Site
             );
         }, $products);
 
-        return $productId ? $productEntities[0] : $productEntities;
+        if($productId) {
+            return $productEntities[0];
+        }
+        $this->products = $productEntities;
+        return $this->products;
     }
 }
