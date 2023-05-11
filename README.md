@@ -2,15 +2,14 @@
 
 **This is open source software and not in any official way supported by Webflow.**
 
-This PHP SDK allows you to interact with the Webflow API easily. The Webflow class provides methods to manage sites, domains, webhooks, collections, products, etc.
+This PHP SDK allows you to interact with the Webflow API easily.
 
-There are two main ways to use this library. Directly as an API wrapper through the `Webflow` class. This will provide you with methods analogous to those provided by the [REST API ](https://developers.webflow.com/reference) (e.g. [List Sites](https://developers.webflow.com/reference/list-sites) is `listSites()`). All methods return arrays and most endpoints are covered.
+There are two main ways to use this library. By accessing Sites and other entities and interacting with their respective classes or...
+[See the Entities documentation](#entities)
+
+...directly as an API wrapper through the underlying `Webflow` class. 
 
 [See the API client wrapper documentation](#client-api-wrapper)
-
-The second way is through the use of entities. When you request a site (or list of sites) you'll get back `Nicdev\WebflowSdk\Entities\Site` which can be interacted with to get its collections, and other associated entities, as well as publish and interact with the site itself.
-
-[See the Entities documentation](#entities)
 
 # Table of Contents
 

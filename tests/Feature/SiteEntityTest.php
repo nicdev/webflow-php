@@ -3,6 +3,7 @@
 use DateTime;
 use DateTimeZone;
 use Nicdev\WebflowSdk\Entities\Site;
+use Nicdev\WebflowSdk\Entities\Webhook;
 use Nicdev\WebflowSdk\Webflow;
 
 beforeEach(function () {
@@ -23,8 +24,8 @@ beforeEach(function () {
 it('can publish the site', function () {
     // Prepare the Webflow mock
     $this->webflow->expects($this->once())
-        ->method('post')
-        ->with('/sites/site_id/publish');
+        ->method('publishSite')
+        ->with('site_id');
 
     // Call the publish method and verify the result
     $result = $this->site->publish();
@@ -33,14 +34,57 @@ it('can publish the site', function () {
 
 // Add more test functions for other public methods in the Site class
 
-test('domains', function () {
-    // ...
+it('can retrieve a collection of domains', function () {
+    // Prepare the Webflow mock
+    $this->webflow->expects($this->exactly(2))
+        ->method('listDomains')
+        ->with('site_id');
+
+    // Returns current domains
+    $result = $this->site->domains;
+    expect($result)->toBeArray();
+
+    // Fetches domains
+    $result = $this->site->domains();
+    expect($result)->toBeArray();
+
+    // Return already loaded domains
+    $result = $this->site->domains;
+    expect($result)->toBeArray();
 });
 
-test('webhooks', function () {
-    // ...
+test('it gets webhooks for a site', function () {
+    // Prepare the Webflow mock
+    $this->webflow->expects($this->exactly(2))
+        ->method('listWebhooks');
+    
+    // Returns current domains
+    $result = $this->site->webhooks;
+    expect($result)->toBeArray();
+
+    // Fetches domains
+    $result = $this->site->webhooks();
+    expect($result)->toBeArray();
+
+    // Return already loaded domains
+    $result = $this->site->webhooks;
+    expect($result)->toBeArray();
 });
 
 test('collections', function () {
+    // Prepare the Webflow mock
+    $this->webflow->expects($this->exactly(2))
+        ->method('listCollections');
+        
+    // Returns current domains
+    $result = $this->site->collections;
+    expect($result)->toBeArray();
 
+    // Fetches domains
+    $result = $this->site->collections();
+    expect($result)->toBeArray();
+
+    // Return already loaded domains
+    $result = $this->site->collections;
+    expect($result)->toBeArray();
 });
