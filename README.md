@@ -4,12 +4,16 @@
 
 This PHP SDK allows you to interact with the Webflow API easily.
 
-There are two main ways to use this library. By accessing Sites and other entities and interacting with their respective classes or...
-[See the Entities documentation](#entities)
+There are two main ways to use this library. By accessing Sites and other entities and interacting with their respective classes or...  
+  
+  
+[See the Entities documentation](#entities)  
+  
+  
+...directly as an API wrapper through the underlying `Webflow` class.  
+  
+[See the API client wrapper documentation](#client-api-wrapper)  
 
-...directly as an API wrapper through the underlying `Webflow` class. 
-
-[See the API client wrapper documentation](#client-api-wrapper)
 
 # Table of Contents
 
